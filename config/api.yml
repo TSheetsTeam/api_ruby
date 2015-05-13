@@ -1,0 +1,57 @@
+objects:
+  user_permissions_set:
+    admin: boolean
+    mobile: boolean
+    status_box: boolean
+    reports: boolean
+    manage_timesheets: boolean
+    manage_authorization: boolean
+    manage_users: boolean
+    manage_my_timesheets: boolean
+    manage_jobcodes: boolean
+    approve_timesheets: boolean
+  user:
+    id: integer
+    first_name: string
+    last_name: string
+    group_id: integer
+    active: boolean
+    employee_number: integer
+    salaried: boolean
+    exempt: boolean
+    username: string
+    email: string
+    payroll_id: integer
+    hire_date: date
+    term_date: date
+    job_title: string
+    gender: string
+    last_modified: datetime
+    last_active: datetime
+    created: datetime
+    mobile_number: string
+    require_password_change: boolean
+    permissions: user_permissions_set
+endpoints:
+  users:
+    url: "/users"
+    object: user
+    actions:
+      - list
+      - add
+      - edit
+    filters:
+      ids: integer[]
+      usernames: string[]
+      active: boolean
+      first_name: string
+      last_name: string
+      modified_before: datetime
+      modified_since: datetime
+      per_page: integer
+      page: integer
+  current_user:
+    url: "/current_user"
+    object: user
+    actions:
+      - get
