@@ -30,9 +30,9 @@ class Generator
   def code_for_model name, config
     template = <<-EOF
       class <%= class_name %> < TSheets::Model
-        <% config.each do |field_name, field_config| %>
+<% config.each do |field_name, field_config| %>
           field :<%= field_name %>, :<%= field_config %>
-        <% end %>
+<% end %>
       end
     EOF
     class_name = to_class_name name
@@ -52,21 +52,21 @@ class Generator
   def code_for_repo name, config
     template = <<-EOF
       class <%= class_name %> < TSheets::Repo
-        url <%= config['url'] %>
+        url "<%= config['url'] %>"
         model <%= model_class %>
-        actions <%= actions.map { |a| ":#{a}" }.join(', ')  %>
-        <% config['filters'].each do |field_name, field_config| %>
-          <% if field_config[/\[\]/] %>
-            filter :<%= field_name %>, [ :#{field_config.gsub(/\[\]/, '')} ]
-          <% else %>
-            filter :<%= field_name %>, :<%= field_config %>
-          <% end %>
-        <% end %>
+        actions <%= actions %>
+<% filters.each do |field_name, field_config| %>
+        filter :<%= field_name %>, <%= field_config %>
+<% end %>
       end
     EOF
     class_name = to_class_name name
-    model_class = to_class_name config['model']
-    actions = config['actions']
+    model_class = to_class_name config['object']
+    actions = config['actions'].map { |a| ":#{a}" }.join(', ')
+    filters = {}
+    filters = config['filters'].map do |fname, fconfig|
+      { fname => ( fconfig[/\[\]/].nil? ? ":#{fconfig}" : "[ :#{fconfig.gsub(/\[\]/, '')} ]" ) }
+    end.inject({}, &:merge) if config['filters']
     ERB.new(template).result binding
   end
 
