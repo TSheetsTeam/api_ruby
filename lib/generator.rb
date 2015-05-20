@@ -29,11 +29,11 @@ class Generator
 
   def code_for_model name, config
     template = <<-EOF
-      class <%= class_name %> < TSheets::Model
+class TSheets::Models::<%= class_name %> < TSheets::Model
 <% config.each do |field_name, field_config| %>
-          field :<%= field_name %>, :<%= field_config %>
+  field :<%= field_name %>, :<%= field_config %>
 <% end %>
-      end
+end
     EOF
     class_name = to_class_name name
     ERB.new(template).result binding
@@ -51,14 +51,14 @@ class Generator
 
   def code_for_repo name, config
     template = <<-EOF
-      class <%= class_name %> < TSheets::Repo
-        url "<%= config['url'] %>"
-        model <%= model_class %>
-        actions <%= actions %>
+class TSheets::Repos::<%= class_name %> < TSheets::Repo
+  url "<%= config['url'] %>"
+  model <%= model_class %>
+  actions <%= actions %>
 <% filters.each do |field_name, field_config| %>
-        filter :<%= field_name %>, <%= field_config %>
+  filter :<%= field_name %>, <%= field_config %>
 <% end %>
-      end
+end
     EOF
     class_name = to_class_name name
     model_class = to_class_name config['object']

@@ -1,5 +1,8 @@
 require "tsheets/version"
 
-module Tsheets
-  # Your code goes here...
+module TSheets
+  require "tsheets/model"
+  require "tsheets/models"
+  Dir["lib/tsheets/models/*.rb"].each {|file| require file.gsub('lib/', '') }
 end
+
