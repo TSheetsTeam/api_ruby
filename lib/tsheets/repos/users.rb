@@ -1,6 +1,6 @@
 class TSheets::Repos::Users < TSheets::Repo
   url "/users"
-  model User
+  model TSheets::Models::User
   actions :list, :add, :edit
 
   filter :ids, [ :integer ]

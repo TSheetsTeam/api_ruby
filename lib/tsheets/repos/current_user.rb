@@ -1,6 +1,6 @@
 class TSheets::Repos::CurrentUser < TSheets::Repo
   url "/current_user"
-  model User
+  model TSheets::Models::User
   actions :get
 
 end

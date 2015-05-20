@@ -53,7 +53,7 @@ end
     template = <<-EOF
 class TSheets::Repos::<%= class_name %> < TSheets::Repo
   url "<%= config['url'] %>"
-  model <%= model_class %>
+  model TSheets::Models::<%= model_class %>
   actions <%= actions %>
 <% filters.each do |field_name, field_config| %>
   filter :<%= field_name %>, <%= field_config %>
