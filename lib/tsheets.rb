@@ -8,5 +8,7 @@ module TSheets
 
   Dir["lib/tsheets/models/*.rb"].each {|file| require file.gsub('lib/', '') }
   Dir["lib/tsheets/repos/*.rb"].each {|file| require file.gsub('lib/', '') }
+
+  require "tsheets/api"
 end
 
