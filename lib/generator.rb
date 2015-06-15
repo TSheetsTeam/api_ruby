@@ -35,7 +35,7 @@ class TSheets::Models::<%= class_name %> < TSheets::Model
 <% end %>
 end
     EOF
-    class_name = to_class_name name
+    class_name = TSheets::Helpers.to_class_name name
     ERB.new(template).result binding
   end
 
@@ -60,17 +60,13 @@ class TSheets::Repos::<%= class_name %> < TSheets::Repo
 <% end %>
 end
     EOF
-    class_name = to_class_name name
-    model_class = to_class_name config['object']
+    class_name = TSheets::Helpers.to_class_name name
+    model_class = TSheets::Helpers.to_class_name config['object']
     actions = config['actions'].map { |a| ":#{a}" }.join(', ')
     filters = {}
     filters = config['filters'].map do |fname, fconfig|
       { fname => ( fconfig[/\[\]/].nil? ? ":#{fconfig}" : "[ :#{fconfig.gsub(/\[\]/, '')} ]" ) }
     end.inject({}, &:merge) if config['filters']
     ERB.new(template).result binding
-  end
-
-  def to_class_name name
-    name.split('_').map { |s| s.capitalize }.join
   end
 end
