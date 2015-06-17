@@ -1,6 +1,6 @@
 class TSheets::API
 
-  TSheets::Repo.classes.each do |klass|
+  TSheets::Repository.classes.each do |klass|
     acc_name = klass.name.split('::').last.gsub(/([A-Z]+)([A-Z][a-z])/,'\1_\2').gsub(/([a-z\d])([A-Z])/,'\1_\2').tr("-", "_").downcase
     send :attr_reader, acc_name
     @@_repos ||= []

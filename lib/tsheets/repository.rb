@@ -1,14 +1,17 @@
-class TSheets::Repo
+require 'date'
+
+class TSheets::Repository
 
   @@allowed_classes_for_spec = {
-    boolean: [ TrueClass, FalseClass ],
-    integer: [ Fixnum ],
-    string:  [ String, Symbol ],
-    date:    [ Date, DateTime ],
-    datetime: [ DateTime ]
+    boolean: [ ::TrueClass, ::FalseClass ],
+    integer: [ ::Fixnum ],
+    string:  [ ::String, ::Symbol ],
+    date:    [ ::Date, ::DateTime ],
+    datetime: [ ::DateTime ]
   }
 
   def initialize(bridge)
+    raise ArgumentError, "Expected initialized instance of TSheets::Bridge when initializing the repository" if !bridge.is_a?(TSheets::Bridge)
     @_bridge = bridge
   end
 

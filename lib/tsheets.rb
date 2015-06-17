@@ -1,10 +1,11 @@
 require "tsheets/version"
+require 'pry'
 
 module TSheets
   require "tsheets/helpers"
   require "tsheets/model"
   require "tsheets/models"
-  require "tsheets/repo"
+  require "tsheets/repository"
   require "tsheets/repos"
   require "tsheets/results"
   require "tsheets/bridge"
