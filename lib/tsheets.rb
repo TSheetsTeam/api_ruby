@@ -3,6 +3,7 @@ require 'pry'
 
 module TSheets
   require "tsheets/helpers"
+  require "tsheets/config"
   require "tsheets/model"
   require "tsheets/models"
   require "tsheets/repository"

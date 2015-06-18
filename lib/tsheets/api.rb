@@ -8,7 +8,8 @@ class TSheets::API
     @@_repos << { :name => acc_name, :class => klass }
   end
 
-  def initialize(config)
+  def initialize(&configure)
+    config = configure.call TSheets::Config.new
     self.bridge = TSheets::Bridge.new(config)
     @@_repos.each do |repo|
       instance_variable_set "@#{repo[:name]}", repo[:class].new(self.bridge)
