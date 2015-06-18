@@ -2,8 +2,6 @@ require 'rest-client'
 require 'json'
 
 class TSheets::Results
-  include Enumerable
-
   def initialize(url, options, headers, model)
     @_url = url
     @_options = options
@@ -15,21 +13,32 @@ class TSheets::Results
   end
 
   def each
-    while @_index < @_loaded.count || load_next_batch
-      yield @_loaded[@_index += 1]
+    return enum_for(:each) unless block_given?
+    while (@_index += 1) < @_loaded.count || load_next_batch
+      yield @_loaded[@_index]
     end
   end
 
+  def next
+    each.next
+  end
+
   def load_next_batch
+    batch = next_batch
+    @_loaded += batch
+    batch != []
+  end
+
+  def next_batch
     response = RestClient.get @_url, @_headers.merge({ params: @_options })
     # TODO: Implement handling of the supplemental data
     if response.code == 200
       resource = JSON.parse(response.to_str)
-      @_loaded << resource[@_name].map do |k, res|
+      resource[@_name].map do |k, res|
         @_model.new res
       end
     else
-      false
+      []
     end
   end
 
