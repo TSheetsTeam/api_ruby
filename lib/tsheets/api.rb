@@ -1,4 +1,5 @@
 class TSheets::API
+  attr_accessor :bridge
 
   TSheets::Repository.classes.each do |klass|
     acc_name = klass.name.split('::').last.gsub(/([A-Z]+)([A-Z][a-z])/,'\1_\2').gsub(/([a-z\d])([A-Z])/,'\1_\2').tr("-", "_").downcase
@@ -8,9 +9,9 @@ class TSheets::API
   end
 
   def initialize(config)
-    @bridge = TSheets::Bridge.new(config)
+    self.bridge = TSheets::Bridge.new(config)
     @@_repos.each do |repo|
-      instance_variable_set "@#{repo[:name]}", repo[:class].new(@bridge)
+      instance_variable_set "@#{repo[:name]}", repo[:class].new(self.bridge)
     end
   end
 

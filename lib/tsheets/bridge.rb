@@ -1,17 +1,28 @@
+require 'rest-client'
+require 'json'
+
 class TSheets::Bridge
+  attr_accessor :config
+
   def initialize(config)
-    @_config = config
+    self.config = config
   end
 
   def access_token
-    @_config[:access_token]
+    self.config[:access_token]
   end
 
   def base_url
-    @_config[:base_url] || "https://rest.tsheets.com/api/v1"
+    self.config[:base_url] || "https://rest.tsheets.com/api/v1"
   end
 
-  def get(model, url, options)
-    TSheets::Results.new "#{base_url}#{url}", options, { Authorization: "Bearer: #{self.access_token}" }, model
+  def next_batch(url, options)
+    response = RestClient.get "#{base_url}#{url}", { Authorization: "Bearer: #{self.access_token}", params: options }
+    if response.code == 200
+      JSON.parse(response.to_str)
+    else
+      []
+    end
   end
+
 end

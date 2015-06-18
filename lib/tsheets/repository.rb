@@ -1,6 +1,7 @@
 require 'date'
 
 class TSheets::Repository
+  attr_accessor :bridge
 
   @@allowed_classes_for_spec = {
     boolean: [ ::TrueClass, ::FalseClass ],
@@ -12,7 +13,7 @@ class TSheets::Repository
 
   def initialize(bridge)
     raise ArgumentError, "Expected initialized instance of TSheets::Bridge when initializing the repository" if !bridge.is_a?(TSheets::Bridge)
-    @_bridge = bridge
+    self.bridge = bridge
   end
 
   def filters
@@ -20,7 +21,7 @@ class TSheets::Repository
   end
 
   def where(options)
-    @_bridge.get self.model, self.url, self.validated_options(options)
+    TSheets::Results.new url, self.validated_options(options), self.model, self.bridge
   end
 
   def validated_options(options)
