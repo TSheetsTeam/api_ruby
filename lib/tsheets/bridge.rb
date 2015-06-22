@@ -8,12 +8,19 @@ class TSheets::Bridge
     self.config = config
   end
 
-  def next_batch(url, options)
+  def next_batch(url, name, options)
     response = RestClient.get "#{self.config.base_url}#{url}", { Authorization: "Bearer: #{self.config.access_token}", params: options }
     if response.code == 200
-      JSON.parse(response.to_str)
+      data = JSON.parse(response.to_str)
+      return {
+        items: data['results'][name].values,
+        has_more: data['more'] == true
+      }
     else
-      []
+      {
+        items: [],
+        has_more: false
+      }
     end
   end
 

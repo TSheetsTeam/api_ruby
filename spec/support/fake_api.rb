@@ -1,6 +1,7 @@
 class ObjModel < TSheets::Model
   field :id, :integer
   field :name, :string
+  field :group_id, :integer
 end
 
 class ObjRepo < TSheets::Repository
