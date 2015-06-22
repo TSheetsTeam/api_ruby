@@ -7,6 +7,14 @@ class TSheets::Model
     @@_accessors[name].push fname
   end
 
+  def self.from_raw(hash)
+    hash.inject self.new do |o, p|
+      k, v = p
+      o.send "#{k}=", v
+      o
+    end
+  end
+
   def attribute_names
     @@_accessors[self.class.name]
   end

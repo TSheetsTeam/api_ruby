@@ -26,7 +26,7 @@ class TSheets::Results
 
   def load_next_batch
     batch = self.bridge.next_batch(self.url, self.options)
-    self.loaded += batch
+    self.loaded += batch.map { |o| self.model.from_raw(o) }
     batch != []
   end
 
