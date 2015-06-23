@@ -27,6 +27,10 @@ class TSheets::Results
     results
   end
 
+  def to_a
+    self.all
+  end
+
   def next
     each.next
   end
