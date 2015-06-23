@@ -5,7 +5,7 @@ describe TSheets::Bridge do
   it "conforms to the response JSON structure" do
     bridge = fake_bridge
     repo = ObjRepo.new(bridge)
-    expect(RestClient).to receive(:get) { 
+    expect(TSheets::TestAdapter).to receive(:get) { 
       OpenStruct.new({
         code: 200,
         to_str:
@@ -50,7 +50,7 @@ describe TSheets::Bridge do
     bridge = fake_bridge
     repo = ObjRepo.new(bridge)
     i = 0
-    expect(RestClient).to receive(:get).at_least(1) { 
+    expect(TSheets::TestAdapter).to receive(:get).at_least(1) { 
       OpenStruct.new({
         code: 200,
         to_str:

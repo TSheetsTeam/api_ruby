@@ -1,7 +1,10 @@
 require 'support/fake_api'
+require 'tsheets/test_adapter'
 
 module Helpers
   def fake_bridge
-    TSheets::Bridge.new TSheets::Config.new
+    config = TSheets::Config.new
+    config.adapter = TSheets::TestAdapter
+    TSheets::Bridge.new config
   end
 end

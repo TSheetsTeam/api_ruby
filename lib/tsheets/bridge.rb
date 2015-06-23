@@ -1,4 +1,3 @@
-require 'rest-client'
 require 'json'
 
 class TSheets::Bridge
@@ -9,7 +8,7 @@ class TSheets::Bridge
   end
 
   def next_batch(url, name, options)
-    response = RestClient.get "#{self.config.base_url}#{url}", { Authorization: "Bearer: #{self.config.access_token}", params: options }
+    response = self.config.adapter.get "#{self.config.base_url}#{url}", { Authorization: "Bearer: #{self.config.access_token}", params: options }
     if response.code == 200
       data = JSON.parse(response.to_str)
       return {

@@ -4,6 +4,8 @@ require 'pry'
 module TSheets
   require "tsheets/helpers"
   require "tsheets/config"
+  require "tsheets/adapter"
+  require "tsheets/rest_adapter"
   require "tsheets/model"
   require "tsheets/models"
   require "tsheets/repository"
