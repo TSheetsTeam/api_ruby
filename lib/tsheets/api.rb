@@ -9,7 +9,8 @@ class TSheets::API
   end
 
   def initialize(&configure)
-    config = configure.call TSheets::Config.new
+    config = TSheets::Config.new
+    configure.call config
     self.bridge = TSheets::Bridge.new(config)
     @@_repos.each do |repo|
       instance_variable_set "@#{repo[:name]}", repo[:class].new(self.bridge)
