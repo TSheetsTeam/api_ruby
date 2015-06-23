@@ -21,6 +21,12 @@ class TSheets::Results
     self.index = -1
   end
 
+  def all
+    results = []
+    self.each { |i| results << i }
+    results
+  end
+
   def next
     each.next
   end

@@ -24,6 +24,10 @@ class TSheets::Repository
     TSheets::Results.new url, self.validated_options(options), self.model, self.bridge
   end
 
+  def all
+    self.where({}).all
+  end
+
   def validated_options(options)
     -> {
       options.each do |name, value|
