@@ -20,8 +20,18 @@ class TSheets::Repository
     @@filters
   end
 
+  def with_action(action, &block)
+    if self.actions.include? action
+      block.call
+    else
+      raise TSheets::MethodNotAvailableError, "Method '#{caller[0].split("`").pop.gsub("'", "")}' not available on #{self.class.name} due to lack of the :#{action} in available actions list. Actions list: #{self.actions}"
+    end
+  end
+
   def where(options)
-    TSheets::Results.new url, self.validated_options(options), self.model, self.bridge
+    with_action :list do
+      TSheets::Results.new url, self.validated_options(options), self.model, self.bridge
+    end
   end
 
   def all

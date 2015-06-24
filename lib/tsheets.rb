@@ -2,6 +2,7 @@ require "tsheets/version"
 require 'pry'
 
 module TSheets
+  require "tsheets/errors"
   require "tsheets/helpers"
   require "tsheets/config"
   require "tsheets/adapter"
