@@ -24,6 +24,12 @@ describe TSheets::Results do
     end
   end
 
+  it 'properly decodes the path to object in the result json' do
+    repo = ScopedObjects::ObjRepo2.new @bridge
+    results = repo.where({})
+    expect(results.name).to eq('obj_model2s')
+  end
+
   describe 'all() and to_a() methods' do
     it 'exist' do
       results = @repo.where({})
