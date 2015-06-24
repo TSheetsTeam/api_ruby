@@ -33,11 +33,14 @@ module TSheets
     def code_for_model name, config
       template = <<-EOF
   class TSheets::Models::<%= class_name %> < TSheets::Model
-  <% config.each do |field_name, field_config| %>
-    field :<%= field_name %>, :<%= field_config %>
-  <% end %>
+  <% fields.each do |field_name, field_config| %>
+    field :<%= field_name %>, <%= field_config %><% end %>
   end
       EOF
+      fields = {}
+      fields = config.map do |fname, fconfig|
+        { fname => ( !fconfig.is_a?(Array) ? ":#{fconfig}" : "[ :#{fconfig.first} ]" ) }
+      end.inject({}, &:merge) if config
       class_name = TSheets::Helpers.to_class_name name
       ERB.new(template).result binding
     end
@@ -59,8 +62,7 @@ module TSheets
     model TSheets::Models::<%= model_class %>
     actions <%= actions %>
   <% filters.each do |field_name, field_config| %>
-    filter :<%= field_name %>, <%= field_config %>
-  <% end %>
+    filter :<%= field_name %>, <%= field_config %><% end %>
   end
       EOF
       class_name = TSheets::Helpers.to_class_name name

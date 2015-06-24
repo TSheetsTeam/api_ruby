@@ -12,25 +12,27 @@ objects:
     approve_timesheets: boolean
   user:
     id: integer
+    username: string
+    email: string
     first_name: string
     last_name: string
     group_id: integer
-    active: boolean
+    manager_of_group_ids: [ integer ]
     employee_number: integer
     salaried: boolean
     exempt: boolean
-    username: string
-    email: string
-    payroll_id: integer
+    payroll_id: string
+    client_url: string
+    mobile_number: string
     hire_date: date
     term_date: date
-    job_title: string
-    gender: string
-    last_modified: datetime
     last_active: datetime
-    created: datetime
-    mobile_number: string
+    active: boolean
     require_password_change: boolean
+    approved_to: date
+    submitted_to: date
+    last_modified: datetime
+    created: datetime
     permissions: user_permissions_set
 endpoints:
   users:
