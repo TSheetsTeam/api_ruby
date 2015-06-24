@@ -4,6 +4,26 @@ class ObjModel < TSheets::Model
   field :group_id, :integer
 end
 
+class ObjTypedModel < TSheets::Model
+  field :id, :integer
+  field :name, :string
+  field :created, :datetime
+  field :born, :date
+  field :active, :boolean
+  field :endorsed, :boolean
+  field :group_ids, [ :integer ]
+  field :tags, [ :string ]
+  field :significant_dates, [ :date ]
+  field :answers_path, [ :boolean ]
+end
+
+class ObjTypedRepo < TSheets::Repository
+  url '/typed_objects'
+  model ObjTypedModel
+  actions :list, :add, :edit
+  filter :ids, [ :integer ]
+end
+
 class ObjRepo < TSheets::Repository
   url '/objects'
   model ObjModel

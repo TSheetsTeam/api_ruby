@@ -1,5 +1,4 @@
   class TSheets::Models::UserPermissionsSet < TSheets::Model
-  
     field :admin, :boolean
     field :mobile, :boolean
     field :status_box, :boolean

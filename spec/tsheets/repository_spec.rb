@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe TSheets::Repository do
   it 'takes a valid bridge at initialization' do
-    expect { TSheets::Repository.new(nil) }.to raise_exception
+    expect { TSheets::Repository.new(nil) }.to raise_exception(ArgumentError)
   end
 
   describe 'where() method' do

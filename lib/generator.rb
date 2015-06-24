@@ -32,8 +32,7 @@ module TSheets
 
     def code_for_model name, config
       template = <<-EOF
-  class TSheets::Models::<%= class_name %> < TSheets::Model
-  <% fields.each do |field_name, field_config| %>
+  class TSheets::Models::<%= class_name %> < TSheets::Model<% fields.each do |field_name, field_config| %>
     field :<%= field_name %>, <%= field_config %><% end %>
   end
       EOF
@@ -60,8 +59,7 @@ module TSheets
   class TSheets::Repos::<%= class_name %> < TSheets::Repository
     url "<%= config['url'] %>"
     model TSheets::Models::<%= model_class %>
-    actions <%= actions %>
-  <% filters.each do |field_name, field_config| %>
+    actions <%= actions %><% filters.each do |field_name, field_config| %>
     filter :<%= field_name %>, <%= field_config %><% end %>
   end
       EOF

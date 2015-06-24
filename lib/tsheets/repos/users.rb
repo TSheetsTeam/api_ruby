@@ -2,7 +2,6 @@
     url "/users"
     model TSheets::Models::User
     actions :list, :add, :edit
-  
     filter :ids, [ :integer ]
     filter :usernames, [ :string ]
     filter :active, :boolean

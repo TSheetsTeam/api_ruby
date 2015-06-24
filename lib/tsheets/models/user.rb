@@ -1,5 +1,4 @@
   class TSheets::Models::User < TSheets::Model
-  
     field :id, :integer
     field :username, :string
     field :email, :string
