@@ -12,6 +12,7 @@ module TSheets
   require "tsheets/repository"
   require "tsheets/repos"
   require "tsheets/results"
+  require "tsheets/supplemental_cache"
   require "tsheets/bridge"
 
   Dir["lib/tsheets/models/*.rb"].each {|file| require file.gsub('lib/', '') }

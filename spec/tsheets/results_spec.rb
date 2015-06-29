@@ -3,7 +3,7 @@ require 'spec_helper'
 describe TSheets::Results do
   before(:each) do
     @bridge = fake_bridge
-    @repo = ObjRepo.new(@bridge)
+    @repo = ObjRepo.new(@bridge, fake_cache)
   end
 
   it 'implements Enumerator' do
@@ -25,7 +25,7 @@ describe TSheets::Results do
   end
 
   it 'properly decodes the path to object in the result json' do
-    repo = ScopedObjects::ObjRepo2.new @bridge
+    repo = ScopedObjects::ObjRepo2.new @bridge, fake_cache
     results = repo.where({})
     expect(results.name).to eq('obj_model2s')
   end

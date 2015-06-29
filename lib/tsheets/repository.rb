@@ -1,7 +1,7 @@
 require 'date'
 
 class TSheets::Repository
-  attr_accessor :bridge
+  attr_accessor :bridge, :cache
 
   @@allowed_classes_for_spec = {
     boolean: [ ::TrueClass, ::FalseClass ],
@@ -11,9 +11,11 @@ class TSheets::Repository
     datetime: [ ::DateTime ]
   }
 
-  def initialize(bridge)
+  def initialize(bridge, cache)
     raise ArgumentError, "Expected initialized instance of TSheets::Bridge when initializing the repository" if !bridge.is_a?(TSheets::Bridge)
+    raise ArgumentError, "Expected initialized instance of TSheets::SupplementalCache when initializing the repository" if !cache.is_a?(TSheets::SupplementalCache)
     self.bridge = bridge
+    self.cache = cache
   end
 
   def filters
@@ -30,7 +32,7 @@ class TSheets::Repository
 
   def where(options)
     with_action :list do
-      TSheets::Results.new url, self.validated_options(options), self.model, self.bridge
+      TSheets::Results.new url, self.validated_options(options), self.model, self.bridge, self.cache
     end
   end
 

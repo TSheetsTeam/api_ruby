@@ -4,7 +4,7 @@ describe TSheets::Bridge do
 
   it "conforms to the response JSON structure" do
     bridge = fake_bridge
-    repo = ObjRepo.new(bridge)
+    repo = ObjRepo.new(bridge, fake_cache)
     expect(TSheets::TestAdapter).to receive(:get) { 
       OpenStruct.new({
         code: 200,
@@ -48,7 +48,7 @@ describe TSheets::Bridge do
 
  it "fetching mechanism uses an info about the availability of more data" do
     bridge = fake_bridge
-    repo = ObjRepo.new(bridge)
+    repo = ObjRepo.new(bridge, fake_cache)
     i = 0
     expect(TSheets::TestAdapter).to receive(:get).at_least(1) { 
       OpenStruct.new({

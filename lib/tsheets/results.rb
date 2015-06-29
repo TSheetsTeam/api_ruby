@@ -1,8 +1,8 @@
 class TSheets::Results
-  attr_accessor :url, :options, :model,
+  attr_accessor :url, :options, :model, :cache,
     :bridge, :name, :index, :loaded, :has_more
 
-  def initialize(url, options, model, bridge)
+  def initialize(url, options, model, bridge, cache)
     self.url = url
     self.options = options
     self.model = model
@@ -10,6 +10,7 @@ class TSheets::Results
     self.index = -1
     self.loaded = []
     self.bridge = bridge
+    self.cache = cache
     self.has_more = true
   end
 
@@ -39,7 +40,7 @@ class TSheets::Results
     response = self.bridge.next_batch(self.url, self.name, self.options)
     batch = response[:items]
     self.has_more = response[:has_more]
-    self.loaded += batch.map { |o| self.model.from_raw(o, response[:supplemental] || {}) }
+    self.loaded += batch.map { |o| self.model.from_raw(o, self.cache, response[:supplemental] || {}) }
     batch != []
   end
 

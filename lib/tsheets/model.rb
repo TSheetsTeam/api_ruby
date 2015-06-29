@@ -1,4 +1,10 @@
 class TSheets::Model
+  attr_accessor :cache
+
+  def initialize(cache)
+    self.cache = cache
+  end
+
   def self.field fname, type
     send :attr_accessor, fname
 
@@ -43,14 +49,14 @@ class TSheets::Model
     end
   end
 
-  def self.from_raw(hash, supplemental = {})
-    instance = hash.inject self.new do |o, p|
+  def self.from_raw(hash, cache, supplemental = {})
+    instance = hash.inject self.new(cache) do |o, p|
       k, v = p
       o.send "#{k}=", cast_raw(v, k)
       o
     end
     models.each do |model_def|
-      instance.send "#{model_def[:name]}=", resolve_supplemental(instance, model_def, supplemental)
+      instance.send "#{model_def[:name]}=", resolve_supplemental(instance, model_def, cache, supplemental)
     end
     instance
   end
@@ -67,11 +73,13 @@ class TSheets::Model
     end
   end
 
-  def self.resolve_supplemental(instance, model_def, supplemental)
-    return if supplemental.empty?
+  def self.resolve_supplemental(instance, model_def, cache, supplemental)
     raw_supplemental = find_raw_supplemental(instance, model_def, supplemental)
-    return unless raw_supplemental
-    TSheets::Helpers.to_class(model_def[:type].to_s).from_raw raw_supplemental
+    if raw_supplemental
+      instance.cache.store model_def, TSheets::Helpers.to_class(model_def[:type].to_s).from_raw(raw_supplemental, cache)
+    else
+      instance.cache.resolve model_def, instance
+    end
   end
 
   def attribute_names

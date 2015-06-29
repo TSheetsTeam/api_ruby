@@ -7,4 +7,8 @@ module Helpers
     config.adapter = TSheets::TestAdapter
     TSheets::Bridge.new config
   end
+
+  def fake_cache
+    TSheets::SupplementalCache.new
+  end
 end
