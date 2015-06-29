@@ -39,7 +39,7 @@ class TSheets::Results
     response = self.bridge.next_batch(self.url, self.name, self.options)
     batch = response[:items]
     self.has_more = response[:has_more]
-    self.loaded += batch.map { |o| self.model.from_raw(o) }
+    self.loaded += batch.map { |o| self.model.from_raw(o, response[:supplemental] || {}) }
     batch != []
   end
 

@@ -1,7 +1,14 @@
+class ObjGroupModel < TSheets::Model
+  field :id, :integer
+  field :name, :string
+end
+
 class ObjModel < TSheets::Model
   field :id, :integer
   field :name, :string
   field :group_id, :integer
+
+  model :group, type: :obj_group_model, foreign: :group_id, primary: :id
 end
 
 class ObjTypedModel < TSheets::Model

@@ -1,11 +1,17 @@
 class TSheets::Helpers
   class << self 
     def to_class_name(name)
-      name.split('_').map { |s| s.capitalize }.join
+      name.to_s.split('_').map { |s| s.capitalize }.join
+    end
+
+    def class_from_string(str)
+      str.split('::').inject(Object) do |mod, class_name|
+        mod.const_get(class_name)
+      end
     end
 
     def to_class(name)
-      to_class_name(name).constantize
+      class_from_string to_class_name(name)
     end
 
     def class_to_endpoint(klass)

@@ -7,8 +7,20 @@ class TSheets::Model
     @@_accessors[name].push name: fname.to_sym, type: type
   end
 
+  def self.model fname, options
+    send :attr_accessor, fname
+
+    @@_models ||= {}
+    @@_models[name] ||= []
+    @@_models[name].push options.merge(name: fname)
+  end
+
+  def self.type_for(model_name, field_name)
+    @@_accessors[model_name].find { |a| a[:name] == field_name.to_sym }[:type]
+  end
+
   def self.type_for_key(key)
-    @@_accessors[name].find { |a| a[:name] == key.to_sym }[:type]
+    type_for(name, key)
   end
 
   def self.cast_raw(value, key, type = nil)
@@ -31,12 +43,35 @@ class TSheets::Model
     end
   end
 
-  def self.from_raw(hash)
-    hash.inject self.new do |o, p|
+  def self.from_raw(hash, supplemental = {})
+    instance = hash.inject self.new do |o, p|
       k, v = p
       o.send "#{k}=", cast_raw(v, k)
       o
     end
+    models.each do |model_def|
+      instance.send "#{model_def[:name]}=", resolve_supplemental(instance, model_def, supplemental)
+    end
+    instance
+  end
+
+  def self.models
+    @@_models[name] || []
+  end
+
+  def self.find_raw_supplemental(instance, model_def, supplemental)
+    return if supplemental.empty?
+    linked_id = instance.send model_def[:foreign]
+    supplemental["#{model_def[:type]}s".to_sym].find do |raw|
+      linked_id == cast_raw(raw[model_def[:primary].to_s], model_def[:primary], type_for(TSheets::Helpers.to_class_name(model_def[:type]), model_def[:primary]))
+    end
+  end
+
+  def self.resolve_supplemental(instance, model_def, supplemental)
+    return if supplemental.empty?
+    raw_supplemental = find_raw_supplemental(instance, model_def, supplemental)
+    return unless raw_supplemental
+    TSheets::Helpers.to_class(model_def[:type].to_s).from_raw raw_supplemental
   end
 
   def attribute_names

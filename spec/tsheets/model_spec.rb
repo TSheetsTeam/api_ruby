@@ -15,7 +15,7 @@ describe TSheets::Model do
         significant_dates: [ "1986-01-15", "2009-12-26" ],
         answers_path: [ true, false, false, true ]
       })
-      object = ObjTypedModel.from_raw(JSON.parse(json))
+      object = ObjTypedModel.from_raw(JSON.parse(json), {})
       expect(object.id).to eq(1)
       expect(object.name).to eq("Testy Tester")
       expect(object.created).to eq(DateTime.parse("2004-02-12T15:19:21+00:00"))

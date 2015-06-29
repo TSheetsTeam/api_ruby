@@ -51,6 +51,59 @@ describe TSheets::Repository do
         expect { repo.where(params).all }.to raise_exception(TSheets::FilterValueInvalidError)
       end
     end
+
+    context 'storing of supplemental data' do
+      it 'makes the supplemental data available as instances of correct classes accessed by fields' do
+        repo = ObjRepo.new(fake_bridge)
+        expect(TSheets::TestAdapter).to receive(:get).and_return(OpenStruct.new({
+          code: 200,
+          to_str: { 
+            results: {
+              obj_models: {
+                '1' => {
+                  id: 1,
+                  name: 'Name1',
+                  group_id: 1
+                },
+                '2' => {
+                  id: 2,
+                  name: 'Name2',
+                  group_id: 2
+                },
+                '3' => {
+                  id: 3,
+                  name: 'Name3',
+                  group_id: 2
+                },
+                '4' => {
+                  id: 4,
+                  name: 'Name4',
+                  group_id: 1
+                }
+              } 
+            }, 
+            more: false,
+            supplemental_data: {
+              obj_group_models: {
+                '1' => {
+                  id: 1,
+                  name: 'Group1'
+                },
+                '2' => {
+                  id: 2,
+                  name: 'Group2'
+                }
+              }
+            }
+          }.to_json 
+        }))
+        results = repo.where({}).all
+        results.each do |obj|
+          expect(obj.group).to be_an_instance_of(ObjGroupModel)
+          expect(obj.group.name).to eq("Group#{obj.group.id}")
+        end
+      end
+    end
   end
 
   describe 'all() method' do

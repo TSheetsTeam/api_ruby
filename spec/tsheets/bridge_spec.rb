@@ -72,7 +72,7 @@ describe TSheets::Bridge do
               },
               "more": #{ (i += 1) != 4 },
               "supplemental_data": {
-                "groups": {
+                "obj_group_models": {
                   "1": {
                       "id": 1,
                       "name": "test1"

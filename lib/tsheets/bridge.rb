@@ -13,7 +13,13 @@ class TSheets::Bridge
       data = JSON.parse(response.to_str)
       return {
         items: data['results'][name].values,
-        has_more: data['more'] == true
+        has_more: data['more'] == true,
+        supplemental: data['supplemental_data'] ? data['supplemental_data'].inject({}) do |sum, parts|
+          sum
+          key, value = parts
+          sum[key.to_sym] = value.values
+          sum
+        end : {}
       }
     else
       {
