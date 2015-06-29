@@ -48,18 +48,18 @@ class TSheets::Repository
 
   def validate_option(name, value)
     type_spec = @@filters[name]
-    raise ArgumentError, "Unknown filter for #{self.class} - #{name}" if type_spec.nil?
+    raise TSheets::FilterNotAvailableError, "Unknown filter for #{self.class} - #{name}" if type_spec.nil?
     if type_spec.is_a?(Array)
       if !value.is_a?(Array)
-        raise ArgumentError, "Expected the value for the #{name} filter to be an array"
+        raise TSheets::FilterValueInvalidError, "Expected the value for the #{name} filter to be an array"
       else
         if value.any? { |v| !self.matches_type_spec?(v.class, type_spec.first) }
-          raise ArgumentError, "Expected all values of an array for the #{name} filter to match the type spec: :#{type_spec.first}"
+          raise TSheets::FilterValueInvalidError, "Expected all values of an array for the #{name} filter to match the type spec: :#{type_spec.first}"
         end
       end
     else
       if !self.matches_type_spec?(value.class, type_spec)
-        raise ArgumentError, "Expected the value for the #{name} filter to match the type spec: :#{type_spec}"
+        raise TSheets::FilterValueInvalidError, "Expected the value for the #{name} filter to match the type spec: :#{type_spec}"
       end
     end
   end

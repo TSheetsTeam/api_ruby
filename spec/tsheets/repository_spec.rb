@@ -30,6 +30,27 @@ describe TSheets::Repository do
       expect { repo2.where({}) }.not_to raise_exception
       expect { repo2.all }.not_to raise_exception
     end
+
+    context 'properly uses given filters' do
+      it 'sends given filters with values as params' do
+        repo = ObjTypedRepo.new(fake_bridge) 
+        params = { ids: [1, 2, 3], name: 'Hello', born: true, endorsed: false, tags: [ 'cool', 'unique' ], significant_dates: [ DateTime.now.to_date, Date.parse("1900-01-01") ] }
+        expect(TSheets::TestAdapter).to receive(:get).with(anything(), hash_including({params: params})).and_return(OpenStruct.new({ code: 200, to_str: { results: { obj_typed_models: {} }, more: false }.to_json }))
+        repo.where(params).all
+      end
+
+      it 'throws an exception when given filter does not exist' do
+        repo = ObjTypedRepo.new(fake_bridge) 
+        params = { idontexist: [1, 2, 3], name: 'Hello', born: true, endorsed: false, tags: [ 'cool', 'unique' ], significant_dates: [ DateTime.now.to_date, Date.parse("1900-01-01") ] }
+        expect { repo.where(params).all }.to raise_exception(TSheets::FilterNotAvailableError)
+      end
+
+      it 'throws an exception when given filter accepts a different type of data' do
+        repo = ObjTypedRepo.new(fake_bridge) 
+        params = { ids: [ 1 ], name: 'Hello', born: true, endorsed: false, tags: [ 'cool', 'unique' ], significant_dates: [ DateTime.now.to_date, "1900-01-01" ] }
+        expect { repo.where(params).all }.to raise_exception(TSheets::FilterValueInvalidError)
+      end
+    end
   end
 
   describe 'all() method' do

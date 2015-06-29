@@ -22,6 +22,11 @@ class ObjTypedRepo < TSheets::Repository
   model ObjTypedModel
   actions :list, :add, :edit
   filter :ids, [ :integer ]
+  filter :name, :string
+  filter :born, :boolean
+  filter :endorsed, :boolean
+  filter :tags, [ :string ]
+  filter :significant_dates, [ :date ]
 end
 
 class ObjRepo < TSheets::Repository
