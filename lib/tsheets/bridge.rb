@@ -7,8 +7,12 @@ class TSheets::Bridge
     self.config = config
   end
 
+  def auth_options
+    { "Authorization" => "Bearer #{self.config.access_token}" }
+  end
+
   def next_batch(url, name, options)
-    response = self.config.adapter.get "#{self.config.base_url}#{url}", { "Authorization" => "Bearer #{self.config.access_token}", params: options}
+    response = self.config.adapter.get "#{self.config.base_url}#{url}", self.auth_options.merge(params: options)
     if response.code == 200
       data = JSON.parse(response.to_str)
       return {
@@ -27,6 +31,10 @@ class TSheets::Bridge
         has_more: false
       }
     end
+  end
+
+  def insert(url, raw_entity)
+    self.config.adapter.post "#{self.config.base_url}#{url}", { 'data' => [ raw_entity ] }, self.auth_options
   end
 
 end

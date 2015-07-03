@@ -3,5 +3,9 @@ class TSheets::Adapter
     def get(url, options)
       raise NotImplementedError
     end
+
+    def post(url, data)
+      raise NotImplementedError
+    end
   end
 end

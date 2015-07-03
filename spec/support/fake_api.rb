@@ -24,6 +24,25 @@ class ObjModel < TSheets::Model
   model :group, type: :obj_group_model, foreign: :group_id, primary: :id
 end
 
+class ObjExt < TSheets::Model
+  field :id, :integer
+  field :whoami, :string
+end
+
+class ObjExtTypedModel < TSheets::Model
+  field :id, :integer
+  field :name, :string
+  field :created, :datetime
+  field :born, :date
+  field :active, :boolean
+  field :endorsed, :boolean
+  field :group_ids, [ :integer ]
+  field :tags, [ :string ]
+  field :significant_dates, [ :date ]
+  field :answers_path, [ :boolean ]
+  field :extended, :obj_ext
+end
+
 class ObjTypedModel < TSheets::Model
   field :id, :integer
   field :name, :string
@@ -37,6 +56,18 @@ class ObjTypedModel < TSheets::Model
   field :answers_path, [ :boolean ]
 end
 
+class ObjExtTypedRepo < TSheets::Repository
+  url '/ext_typed_objects'
+  model ObjExtTypedModel
+  actions :list, :add, :edit
+  filter :ids, [ :integer ]
+  filter :name, :string
+  filter :born, :boolean
+  filter :endorsed, :boolean
+  filter :tags, [ :string ]
+  filter :significant_dates, [ :date ]
+end
+
 class ObjTypedRepo < TSheets::Repository
   url '/typed_objects'
   model ObjTypedModel
@@ -47,6 +78,13 @@ class ObjTypedRepo < TSheets::Repository
   filter :endorsed, :boolean
   filter :tags, [ :string ]
   filter :significant_dates, [ :date ]
+end
+
+class ObjTaggedRepo < TSheets::Repository
+  url '/objects'
+  model ObjTaggedModel
+  actions :list, :add, :edit
+  filter :ids, [ :integer ]
 end
 
 class ObjRepo < TSheets::Repository

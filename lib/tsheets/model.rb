@@ -51,6 +51,28 @@ class TSheets::Model
     end
   end
 
+  def cast_to_raw(value, key, type = nil)
+    type_symbol = type || self.class.type_for_key(key)
+    if type_symbol.is_a?(Array)
+      value.map { |i| cast_to_raw(i, key, type_symbol.first) }
+    else
+      case type_symbol
+      when :integer
+        value
+      when :string
+        value
+      when :datetime
+        value.iso8601
+      when :date
+        value.strftime("%Y-%m-%d")
+      when :boolean
+        value
+      else
+        value.to_raw
+      end
+    end
+  end
+
   def self.from_raw(hash, cache, supplemental = {})
     instance = hash.inject self.new(cache) do |o, p|
       k, v = p
@@ -61,6 +83,14 @@ class TSheets::Model
       instance.send "#{model_def[:name]}=", resolve_supplemental(instance, model_def, cache, supplemental)
     end
     instance
+  end
+
+  def to_raw
+    self.attributes.inject({}) do |obj, pair|
+      k, v = pair
+      obj[k.to_s] = cast_to_raw(v, k)
+      obj
+    end
   end
 
   def self.models
