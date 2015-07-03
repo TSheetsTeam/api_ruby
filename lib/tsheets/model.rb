@@ -29,10 +29,10 @@ class TSheets::Model
     type_for(name, key)
   end
 
-  def self.cast_raw(value, key, type = nil)
+  def self.cast_raw(value, key, cache, type = nil)
     type_symbol = type || type_for_key(key)
     if type_symbol.is_a?(Array)
-      value.map { |i| cast_raw(i, key, type_symbol.first) }
+      value.map { |i| cast_raw(i, key, cache, type_symbol.first) }
     else
       case type_symbol
       when :integer
@@ -45,6 +45,8 @@ class TSheets::Model
         Date.parse(value)
       when :boolean
         value == true
+      else
+        TSheets::Helpers.to_class(type_symbol, self).from_raw(value, cache)
       end
     end
   end
@@ -52,7 +54,7 @@ class TSheets::Model
   def self.from_raw(hash, cache, supplemental = {})
     instance = hash.inject self.new(cache) do |o, p|
       k, v = p
-      o.send "#{k}=", cast_raw(v, k)
+      o.send "#{k}=", cast_raw(v, k, cache)
       o
     end
     models.each do |model_def|

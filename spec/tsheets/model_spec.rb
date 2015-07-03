@@ -27,5 +27,43 @@ describe TSheets::Model do
       expect(object.significant_dates).to eq([ "1986-01-15", "2009-12-26" ].map { |d| Date.parse(d) })
       expect(object.answers_path).to eq([ true, false, false, true ])
     end
+
+    it 'properly casts raw data into api defined objects' do
+      json = JSON.dump({
+        id: 1,
+        name: "Testy Tester",
+        group_id: 12,
+        tag: {
+          id: 122,
+          name: "awesome"
+        }
+      })
+      object = ObjTaggedModel.from_raw(JSON.parse(json), {})
+      expect(object.id).to eq(1)
+      expect(object.name).to eq("Testy Tester")
+      expect(object.group_id).to eq(12)
+      expect(object.tag).to be_an_instance_of(ObjTagModel)
+      expect(object.tag.id).to eq(122)
+      expect(object.tag.name).to eq("awesome")
+    end
+
+    it 'properly casts raw data into api defined objects when scoped by modules' do
+      json = JSON.dump({
+        id: 1,
+        name: "Testy Tester",
+        group_id: 12,
+        tag: {
+          id: 122,
+          name: "awesome"
+        }
+      })
+      object = ScopedObjects::ObjTaggedModel.from_raw(JSON.parse(json), {})
+      expect(object.id).to eq(1)
+      expect(object.name).to eq("Testy Tester")
+      expect(object.group_id).to eq(12)
+      expect(object.tag).to be_an_instance_of(ScopedObjects::ObjTagModel)
+      expect(object.tag.id).to eq(122)
+      expect(object.tag.name).to eq("awesome")
+    end
   end
 end

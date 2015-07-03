@@ -3,10 +3,23 @@ class ObjGroupModel < TSheets::Model
   field :name, :string
 end
 
+class ObjTagModel < TSheets::Model
+  field :id, :integer
+  field :name, :string
+end
+
+class ObjTaggedModel < TSheets::Model
+  field :id, :integer
+  field :name, :string
+  field :group_id, :integer
+  field :tag, :obj_tag_model
+end
+
 class ObjModel < TSheets::Model
   field :id, :integer
   field :name, :string
   field :group_id, :integer
+  field :tag, :obj_tag_model
 
   model :group, type: :obj_group_model, foreign: :group_id, primary: :id
 end
@@ -67,4 +80,17 @@ module ScopedObjects
     actions :add, :edit
     filter :ids, [ :integer ]
   end
+
+  class ObjTagModel < TSheets::Model
+    field :id, :integer
+    field :name, :string
+  end
+
+  class ObjTaggedModel < TSheets::Model
+    field :id, :integer
+    field :name, :string
+    field :group_id, :integer
+    field :tag, :obj_tag_model
+  end
+
 end
