@@ -238,6 +238,33 @@ describe TSheets::Repository do
       @repo.insert(model)
     end
 
+    it 'is only available for repos with :add in methods' do
+      @repo = ObjExtTypedRepo2.new(fake_bridge, @cache)
+      data = {
+        'data' => [
+          {
+            'id' => 1,
+            'name' => "Name1",
+            'created' => '2004-02-12T15:19:21+00:00',
+            'born' => '2012-11-11',
+            'active' => true,
+            'endorsed' => false,
+            'group_ids' => [ 1, 6, 9 ],
+            'tags' => [ 'hey', 'hi', 'hello' ],
+            'significant_dates' => [ '2012-01-01', '2012-01-02' ],
+            'answers_path' => [ true, false, true ],
+            'extended' => {
+              'id' => 44,
+              'whoami' => '...'
+            }
+          }
+        ]
+      }
+      expect(TSheets::TestAdapter).not_to receive(:post).with('https://rest.tsheets.com/api/v1/ext_typed_objects', data, anything())
+      model = ObjExtTypedModel.from_raw(data['data'].first, @cache)
+      expect { @repo.insert(model) }.to raise_exception(TSheets::MethodNotAvailableError)
+    end
+
   end
 end
 

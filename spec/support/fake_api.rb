@@ -68,6 +68,18 @@ class ObjExtTypedRepo < TSheets::Repository
   filter :significant_dates, [ :date ]
 end
 
+class ObjExtTypedRepo2 < TSheets::Repository
+  url '/ext_typed_objects'
+  model ObjExtTypedModel
+  actions :list, :edit
+  filter :ids, [ :integer ]
+  filter :name, :string
+  filter :born, :boolean
+  filter :endorsed, :boolean
+  filter :tags, [ :string ]
+  filter :significant_dates, [ :date ]
+end
+
 class ObjTypedRepo < TSheets::Repository
   url '/typed_objects'
   model ObjTypedModel
