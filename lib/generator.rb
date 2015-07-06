@@ -30,20 +30,6 @@ module TSheets
       write_dynamic! "models/#{name}.rb", code_for_model(name, config)
     end
 
-    def code_for_model name, config
-      template = <<-EOF
-  class TSheets::Models::<%= class_name %> < TSheets::Model<% fields.each do |field_name, field_config| %>
-    field :<%= field_name %>, <%= field_config %><% end %>
-  end
-      EOF
-      fields = {}
-      fields = config.map do |fname, fconfig|
-        { fname => ( !fconfig.is_a?(Array) ? ":#{fconfig}" : "[ :#{fconfig.first} ]" ) }
-      end.inject({}, &:merge) if config
-      class_name = TSheets::Helpers.to_class_name name
-      ERB.new(template).result binding
-    end
-
     def generate_repos! endpoints_config
       endpoints_config.each do |name, config|
         generate_repo! name, config
@@ -72,5 +58,20 @@ module TSheets
       end.inject({}, &:merge) if config['filters']
       ERB.new(template).result binding
     end
+
+    def code_for_model name, config
+      template = <<-EOF
+  class TSheets::Models::<%= class_name %> < TSheets::Model<% fields.each do |field_name, field_config| %>
+    field :<%= field_name %>, <%= field_config %><% end %>
+  end
+      EOF
+      fields = {}
+      fields = config.map do |fname, fconfig|
+        { fname => ( !fconfig.is_a?(Array) ? ":#{fconfig}" : "[ :#{fconfig.first} ]" ) }
+      end.inject({}, &:merge) if config
+      class_name = TSheets::Helpers.to_class_name name
+      ERB.new(template).result binding
+    end
+
   end
 end

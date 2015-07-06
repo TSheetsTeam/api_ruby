@@ -34,7 +34,70 @@ objects:
     last_modified: datetime
     created: datetime
     permissions: user_permissions_set
+  jobcode:
+    id: integer
+    parent_id: integer
+    name: string
+    short_code: string
+    type: string
+    billable: boolean
+    billable_rate: float
+    has_children: boolean
+    assigned_to_all: boolean
+    required_customfields: [ integer ]
+    filtered_customfielditems: object
+    active: boolean
+    last_modified: datetime
+    created: datetime
+  timesheet:
+    id: integer
+    user_id: integer
+    jobcode_id: integer
+    locked: integer
+    notes: string
+    customfields: string
+    created: datetime
+    last_modified: datetime
+    type: string
+    on_the_clock: boolean
 endpoints:
+  jobcodes:
+    url: "/jobcodes"
+    object: jobcode
+    actions:
+      - list
+      - add
+      - edit
+    filters:
+      ids: integer[]
+      parent_ids: integer[]
+      type: string
+      active: string
+      modified_before: datetime
+      modified_since: datetime
+      per_page: integer
+      page: integer
+  timesheets:
+    url: "/timesheets"
+    object: timesheet
+    actions:
+      - list
+      - add
+      - edit
+      - delete
+    filters:
+      ids: integer[]
+      start_date: date
+      end_date: date
+      jobcode_ids: integer[]
+      user_ids: integer[]
+      group_ids: integer[]
+      on_the_clock: boolean
+      jobcode_type: string
+      modified_before: datetime
+      modified_since: datetime
+      per_page: integer
+      page: integer
   users:
     url: "/users"
     object: user
