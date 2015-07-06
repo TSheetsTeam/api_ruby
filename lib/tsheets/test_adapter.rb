@@ -5,7 +5,10 @@ class TSheets::TestAdapter < TSheets::Adapter
     end
 
     def post(url, data, options)
-      true
+      OpenStruct.new({
+        code: 200,
+        to_str: JSON.dump({_status_extra: ''})
+      })
     end
   end
 end

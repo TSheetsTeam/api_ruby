@@ -11,6 +11,7 @@ module TSheets
   require "tsheets/models"
   require "tsheets/repository"
   require "tsheets/repos"
+  require "tsheets/result"
   require "tsheets/results"
   require "tsheets/supplemental_cache"
   require "tsheets/bridge"

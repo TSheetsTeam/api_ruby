@@ -34,7 +34,8 @@ class TSheets::Bridge
   end
 
   def insert(url, raw_entity)
-    self.config.adapter.post "#{self.config.base_url}#{url}", { 'data' => [ raw_entity ] }, self.auth_options
+    response = self.config.adapter.post "#{self.config.base_url}#{url}", { 'data' => [ raw_entity ] }, self.auth_options
+    TSheets::Result.new response.code, response.to_str
   end
 
 end

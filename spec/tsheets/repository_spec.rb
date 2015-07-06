@@ -233,7 +233,7 @@ describe TSheets::Repository do
           }
         ]
       }
-      expect(TSheets::TestAdapter).to receive(:post).with('https://rest.tsheets.com/api/v1/ext_typed_objects', data, anything())
+      expect(TSheets::TestAdapter).to receive(:post).with('https://rest.tsheets.com/api/v1/ext_typed_objects', data, anything()).and_return(OpenStruct.new({code: 200, to_str: JSON.dump({_status_extra: ''})}))
       model = ObjExtTypedModel.from_raw(data['data'].first, @cache)
       @repo.insert(model)
     end
@@ -263,6 +263,33 @@ describe TSheets::Repository do
       expect(TSheets::TestAdapter).not_to receive(:post).with('https://rest.tsheets.com/api/v1/ext_typed_objects', data, anything())
       model = ObjExtTypedModel.from_raw(data['data'].first, @cache)
       expect { @repo.insert(model) }.to raise_exception(TSheets::MethodNotAvailableError)
+    end
+
+    it 'returns a proper instance of the result class' do
+      @repo = ObjExtTypedRepo.new(fake_bridge, @cache)
+      data = {
+        'data' => [
+          {
+            'id' => 1,
+            'name' => "Name1",
+            'created' => '2004-02-12T15:19:21+00:00',
+            'born' => '2012-11-11',
+            'active' => true,
+            'endorsed' => false,
+            'group_ids' => [ 1, 6, 9 ],
+            'tags' => [ 'hey', 'hi', 'hello' ],
+            'significant_dates' => [ '2012-01-01', '2012-01-02' ],
+            'answers_path' => [ true, false, true ],
+            'extended' => {
+              'id' => 44,
+              'whoami' => '...'
+            }
+          }
+        ]
+      }
+      model = ObjExtTypedModel.from_raw(data['data'].first, @cache)
+      result = @repo.insert(model)
+      expect(result).to be_an_instance_of(TSheets::Result)
     end
 
   end
