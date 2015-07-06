@@ -206,6 +206,40 @@ describe TSheets::Repository do
     end
   end
 
+  describe 'update() method' do
+    before(:each) do
+      @cache = fake_cache
+      @repo = ObjExtTypedRepo.new(fake_bridge, @cache)
+    end
+
+    it 'makes a put request with a payload of a proper format' do
+      obj = {
+        'id' => 1,
+        'name' => "Name1",
+        'created' => '2004-02-12T15:19:21+00:00',
+        'born' => '2012-11-11',
+        'active' => true,
+        'endorsed' => false,
+        'group_ids' => [ 1, 6, 9 ],
+        'tags' => [ 'hey', 'hi', 'hello' ],
+        'significant_dates' => [ '2012-01-01', '2012-01-02' ],
+        'answers_path' => [ true, false, true ],
+        'extended' => {
+          'id' => 44,
+          'whoami' => '...'
+        }
+      }
+      data = {
+        'data' => [
+          obj
+        ]
+      }
+      expect(TSheets::TestAdapter).to receive(:put).with('https://rest.tsheets.com/api/v1/ext_typed_objects', data, anything()).and_return(OpenStruct.new({code: 200, to_str: JSON.dump({obj_ext_typed_models: [ obj.merge({_status_message: 'Updated'}) ]})}))
+      model = ObjExtTypedModel.from_raw(data['data'].first, @cache)
+      @repo.update(model)
+    end
+  end
+
   describe 'insert() method' do
     before(:each) do
       @cache = fake_cache

@@ -7,5 +7,13 @@ class TSheets::Adapter
     def post(url, data)
       raise NotImplementedError
     end
+
+    def put(url, data)
+      raise NotImplementedError
+    end
+
+    def delete(url, data)
+      raise NotImplementedError
+    end
   end
 end

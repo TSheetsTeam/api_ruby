@@ -38,4 +38,9 @@ class TSheets::Bridge
     TSheets::Result.new response.code, response.to_str
   end
 
+  def update(url, raw_entity)
+    response = self.config.adapter.put "#{self.config.base_url}#{url}", { 'data' => [ raw_entity ] }, self.auth_options
+    TSheets::Result.new response.code, response.to_str
+  end
+
 end

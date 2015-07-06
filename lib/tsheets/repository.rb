@@ -42,6 +42,12 @@ class TSheets::Repository
     end
   end
 
+  def update(entity)
+    with_action :edit do
+      self.bridge.update(url, entity.to_raw)
+    end
+  end
+
   def all
     self.where({}).all
   end
