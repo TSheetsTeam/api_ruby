@@ -9,4 +9,11 @@
     field :last_modified, :datetime
     field :type, :string
     field :on_the_clock, :boolean
+    field :start, :datetime
+    field :end, :datetime
+    field :date, :date
+    field :duration, :integer
+    field :tz, :integer
+    field :tz_str, :string
+    field :location, :string
   end

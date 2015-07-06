@@ -91,4 +91,27 @@ describe TSheets::Bridge do
     expect(objs.count).to eq(8)
  end
 
+ it 'handles the case of no results properly' do
+    bridge = fake_bridge
+    repo = ObjRepo.new(bridge, fake_cache)
+    expect(TSheets::TestAdapter).to receive(:get) { 
+      OpenStruct.new({
+        code: 200,
+        to_str:
+          <<-EOF
+            {
+              "results": {
+                "obj_models": [],
+              "more": false,
+              "supplemental_data": {
+              }
+            }
+            }
+          EOF
+      })
+    }
+    objs = repo.where(ids: [1,2]).all
+    expect(objs.count).to eq(0)
+ end
+
 end

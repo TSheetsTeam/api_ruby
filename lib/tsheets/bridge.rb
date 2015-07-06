@@ -16,7 +16,7 @@ class TSheets::Bridge
     if response.code == 200
       data = JSON.parse(response.to_str)
       return {
-        items: data['results'][name].values,
+        items: data['results'][name].is_a?(Hash) ? data['results'][name].values : data['results'][name],
         has_more: data['more'] == true,
         supplemental: data['supplemental_data'] ? data['supplemental_data'].inject({}) do |sum, parts|
           sum

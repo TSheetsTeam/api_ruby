@@ -1,6 +1,9 @@
 class TSheets::Model
   attr_accessor :cache
 
+  @@_models ||= {}
+  @@_accessors ||= {}
+
   def initialize(cache)
     self.cache = cache
   end
@@ -8,7 +11,6 @@ class TSheets::Model
   def self.field fname, type
     send :attr_accessor, fname
 
-    @@_accessors ||= {}
     @@_accessors[name] ||= []
     @@_accessors[name].push name: fname.to_sym, type: type
   end
@@ -16,7 +18,6 @@ class TSheets::Model
   def self.model fname, options
     send :attr_accessor, fname
 
-    @@_models ||= {}
     @@_models[name] ||= []
     @@_models[name].push options.merge(name: fname)
   end
@@ -30,6 +31,7 @@ class TSheets::Model
   end
 
   def self.cast_raw(value, key, cache, type = nil)
+    return nil if value.nil?
     type_symbol = type || type_for_key(key)
     if type_symbol.is_a?(Array)
       value.map { |i| cast_raw(i, key, cache, type_symbol.first) }
@@ -52,6 +54,7 @@ class TSheets::Model
   end
 
   def cast_to_raw(value, key, type = nil)
+    return nil if value.nil?
     type_symbol = type || self.class.type_for_key(key)
     if type_symbol.is_a?(Array)
       value.map { |i| cast_to_raw(i, key, type_symbol.first) }

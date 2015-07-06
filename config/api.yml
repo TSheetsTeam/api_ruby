@@ -60,6 +60,13 @@ objects:
     last_modified: datetime
     type: string
     on_the_clock: boolean
+    start: datetime
+    end: datetime
+    date: date
+    duration: integer
+    tz: integer
+    tz_str: string
+    location: string
 endpoints:
   jobcodes:
     url: "/jobcodes"
