@@ -126,4 +126,4 @@ endpoints:
     url: "/current_user"
     object: user
     actions:
-      - get
+      - list

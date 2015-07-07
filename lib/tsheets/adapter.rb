@@ -4,15 +4,15 @@ class TSheets::Adapter
       raise NotImplementedError
     end
 
-    def post(url, data)
+    def post(url, data, options)
       raise NotImplementedError
     end
 
-    def put(url, data)
+    def put(url, data, options)
       raise NotImplementedError
     end
 
-    def delete(url, data)
+    def delete(url, data, options)
       raise NotImplementedError
     end
   end

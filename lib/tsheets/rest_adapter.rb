@@ -9,5 +9,13 @@ class TSheets::RestAdapter < TSheets::Adapter
     def post(url, data, options)
       RestClient.post url, data, options
     end
+
+    def put(url, data, options)
+      RestClient.put url, data, options
+    end
+
+    def delete(url, data, options)
+      RestClient.delete url, data, options
+    end
   end
 end

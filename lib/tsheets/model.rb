@@ -42,9 +42,9 @@ class TSheets::Model
       when :string
         value
       when :datetime
-        DateTime.parse(value)
+        DateTime.parse(value) rescue nil
       when :date
-        Date.parse(value)
+        Date.parse(value) rescue nil
       when :boolean
         value == true
       else
