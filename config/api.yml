@@ -49,6 +49,20 @@ objects:
     active: boolean
     last_modified: datetime
     created: datetime
+  timesheet_deleted:
+    id: integer
+    user_id: integer
+    jobcode_id: integer
+    start: datetime
+    end: datetime
+    date: date
+    duration: integer
+    locked: integer
+    notes: string
+    customfields: string
+    created: datetime
+    last_modified: datetime
+    type: string
   timesheet:
     id: integer
     user_id: integer
@@ -156,6 +170,27 @@ endpoints:
       modified_since: datetime
       per_page: integer
       page: integer
+  timesheets_deleted:
+    url: "/timesheets_deleted"
+    object: timesheet_deleted
+    actions:
+      - list
+    filters:
+      start_date: date
+      end_date: date
+      ids: integer[]
+      modified_since: datetime
+      modified_before: datetime
+      group_ids: string
+      user_ids: integer[]
+      username: string
+      jobcode_ids: integer[]
+      jobcode_type: string
+      type: string
+      order_results_by: string
+      order_results_reverse: boolean
+      page: integer
+      per_page: integer
   timesheets:
     url: "/timesheets"
     object: timesheet
