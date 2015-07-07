@@ -67,6 +67,13 @@ objects:
     tz: integer
     tz_str: string
     location: string
+  jobcode_assignment:
+    id: integer
+    user_id: integer
+    jobcode_id: integer
+    active: boolean
+    last_modified: datetime
+    created: datetime
 endpoints:
   jobcodes:
     url: "/jobcodes"
@@ -79,6 +86,22 @@ endpoints:
       ids: integer[]
       parent_ids: integer[]
       type: string
+      active: string
+      modified_before: datetime
+      modified_since: datetime
+      per_page: integer
+      page: integer
+  jobcode_assignments:
+    url: "/jobcode_assignments"
+    object: jobcode_assignment
+    actions:
+      - list
+      - add
+      - delete
+    filters:
+      user_ids: integer[]
+      type: string
+      jobcode_parent_id: integer
       active: string
       modified_before: datetime
       modified_since: datetime
