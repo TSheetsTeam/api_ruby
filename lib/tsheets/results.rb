@@ -1,6 +1,10 @@
 class TSheets::Results
+  include Enumerable
+
   attr_accessor :url, :options, :model, :cache,
     :bridge, :name, :index, :loaded, :has_more
+
+  alias_method :all, :to_a
 
   def initialize(url, options, model, bridge, cache)
     self.url = url
@@ -20,20 +24,6 @@ class TSheets::Results
       yield self.loaded[self.index]
     end
     self.index = -1
-  end
-
-  def all
-    results = []
-    self.each { |i| results << i }
-    results
-  end
-
-  def to_a
-    self.all
-  end
-
-  def next
-    each.next
   end
 
   def load_next_batch

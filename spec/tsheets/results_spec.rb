@@ -39,7 +39,7 @@ describe TSheets::Results do
 
     it 'does exaclty the same' do
       results = @repo.where({})
-      expect_any_instance_of(TSheets::Results).to receive(:all).and_return([])
+      expect_any_instance_of(TSheets::Results).to receive(:to_a).and_return([])
       arr = results.to_a
       expect(arr).to eq([])
     end

@@ -187,6 +187,19 @@ describe TSheets::Repository do
     end
   end
 
+  describe 'first() method' do
+    before(:each) do
+      @repo = ObjRepo.new(fake_bridge, fake_cache)
+    end
+    it 'exists' do
+      expect(@repo).to respond_to(:first)
+    end
+    it 'is a shortcut for all.first' do
+      expect_any_instance_of(TSheets::Results).to receive(:all).exactly(1).and_return([1,2,3])
+      expect(@repo.first).to eq(1)
+    end
+  end
+
   describe 'all() method' do
     before(:each) do
       @repo = ObjRepo.new(fake_bridge, fake_cache)

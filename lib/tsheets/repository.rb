@@ -52,6 +52,10 @@ class TSheets::Repository
     self.where({}).all
   end
 
+  def first
+    self.all.first
+  end
+
   def validated_options(options)
     -> {
       options.each do |name, value|
