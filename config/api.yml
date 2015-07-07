@@ -86,7 +86,31 @@ objects:
     last_modified: datetime
     created: datetime
     required_customfields: [ integer ]
+  custom_field_item:
+    id: integer
+    customfield_id: integer
+    name: string
+    short_code: string
+    active: boolean
+    last_modified: datetime
+    created: datetime
+    required_customfields: [ integer ]
 endpoints:
+  custome_field_items:
+    url: "/customfielditems"
+    object: custom_field_item
+    actions:
+      - list
+      - add
+      - edit
+    filters:
+      customfield_id: integer
+      ids: integer[]
+      active: string
+      modified_before: datetime
+      modified_since: datetime
+      per_page: integer
+      page: integer
   custom_fields:
     url: "/customfields"
     object: custom_field
