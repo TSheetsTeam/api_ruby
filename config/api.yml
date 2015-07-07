@@ -74,7 +74,32 @@ objects:
     active: boolean
     last_modified: datetime
     created: datetime
+  custom_field:
+    id: integer
+    name: string
+    short_code: string
+    required: boolean
+    applies_to: string
+    type: string
+    ui_preference: string
+    regex_filter: string
+    last_modified: datetime
+    created: datetime
+    required_customfields: [ integer ]
 endpoints:
+  custom_fields:
+    url: "/customfields"
+    object: custom_field
+    actions:
+      - list
+    filters:
+      ids: integer[]
+      applies_to: string
+      value_type: string
+      modified_before: string
+      modified_since: string
+      per_page: integer
+      page: integer
   jobcodes:
     url: "/jobcodes"
     object: jobcode
