@@ -1,4 +1,4 @@
-  class TSheets::Repos::CustomeFieldItems < TSheets::Repository
+  class TSheets::Repos::CustomFieldItems < TSheets::Repository
     url "/customfielditems"
     model TSheets::Models::CustomFieldItem
     actions :list, :add, :edit

@@ -109,8 +109,34 @@ objects:
     last_modified: datetime
     created: datetime
     required_customfields: [ integer ]
+  geolocation:
+    id: integer
+    user_id: integer
+    accuracy: integer
+    altitude: float
+    latitude: float
+    longitude: float
+    speed: float
+    heading: integer
+    source: string
+    device_identifier: string
+    created: datetime
 endpoints:
-  custome_field_items:
+  geolocations:
+    url: "/geolocations"
+    object: geolocation
+    actions:
+      - list
+      - add
+    filters:
+      ids: integer[]
+      modified_before: datetime
+      modified_since: datetime
+      user_ids: integer[]
+      group_ids: integer[]
+      per_page: integer
+      page: integer
+  custom_field_items:
     url: "/customfielditems"
     object: custom_field_item
     actions:
