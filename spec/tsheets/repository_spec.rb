@@ -35,7 +35,7 @@ describe TSheets::Repository do
       it 'sends given filters with values as params' do
         repo = ObjTypedRepo.new(fake_bridge, fake_cache) 
         params = { ids: [1, 2, 3], name: 'Hello', born: true, endorsed: false, tags: [ 'cool', 'unique' ], significant_dates: [ DateTime.now.to_date, Date.parse("1900-01-01") ] }
-        expect(TSheets::TestAdapter).to receive(:get).with(anything(), hash_including({params: params})).and_return(OpenStruct.new({ code: 200, to_str: { results: { obj_typed_models: {} }, more: false }.to_json }))
+        expect(TSheets::TestAdapter).to receive(:get).with(anything(), hash_including(params), anything()).and_return(OpenStruct.new({ code: 200, to_str: { results: { obj_typed_models: {} }, more: false }.to_json }))
         repo.where(params).all
       end
 

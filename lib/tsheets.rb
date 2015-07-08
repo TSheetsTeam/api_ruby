@@ -5,6 +5,7 @@ module TSheets
   require "tsheets/errors"
   require "tsheets/helpers"
   require "tsheets/config"
+  require "tsheets/http_response"
   require "tsheets/adapter"
   require "tsheets/rest_adapter"
   require "tsheets/model"

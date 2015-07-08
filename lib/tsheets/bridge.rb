@@ -12,7 +12,7 @@ class TSheets::Bridge
   end
 
   def next_batch(url, name, options)
-    response = self.config.adapter.get "#{self.config.base_url}#{url}", self.auth_options.merge(params: options)
+    response = self.config.adapter.get "#{self.config.base_url}#{url}", options, self.auth_options
     if response.code == 200
       data = JSON.parse(response.to_str)
       return {

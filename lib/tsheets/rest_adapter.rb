@@ -1,27 +1,21 @@
-require 'rest-client'
+require "typhoeus"
 
 class TSheets::RestAdapter < TSheets::Adapter
   class << self
-    def get(url, options)
-      RestClient.get url, options
+    def get(url, params, headers)
+      TSheets::HttpResponse.new Typhoeus.get(url, params: params, headers: headers)
     end
 
     def post(url, data, options)
-      RestClient.post url, data.to_json, options
-    rescue => e
-      e.response
+      TSheets::HttpResponse.new Typhoeus.post(url, body: data, headers: options)
     end
 
     def put(url, data, options)
-      RestClient.put url, data.to_json, options
-    rescue => e
-      e.response
+      TSheets::HttpResponse.new Typhoeus.put(url, body: data, headers: options)
     end
 
     def delete(url, data, options)
-      RestClient.delete url, data.to_json, options
-    rescue => e
-      e.response
+      TSheets::HttpResponse.new Typhoeus.delete(url, body: data, headers: options)
     end
   end
 end
