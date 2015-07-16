@@ -259,32 +259,6 @@ describe TSheets::Repository do
       @repo = ObjExtTypedRepo.new(fake_bridge, @cache)
     end
 
-    it 'makes a post request with a payload of a proper format' do
-      data = {
-        'data' => [
-          {
-            'id' => 1,
-            'name' => "Name1",
-            'created' => '2004-02-12T15:19:21+00:00',
-            'born' => '2012-11-11',
-            'active' => true,
-            'endorsed' => false,
-            'group_ids' => [ 1, 6, 9 ],
-            'tags' => [ 'hey', 'hi', 'hello' ],
-            'significant_dates' => [ '2012-01-01', '2012-01-02' ],
-            'answers_path' => [ true, false, true ],
-            'extended' => {
-              'id' => 44,
-              'whoami' => '...'
-            }
-          }
-        ]
-      }
-      expect(TSheets::TestAdapter).to receive(:post).with('https://rest.tsheets.com/api/v1/ext_typed_objects', data, anything()).and_return(OpenStruct.new({code: 200, to_str: JSON.dump({_status_extra: ''})}))
-      model = ObjExtTypedModel.from_raw(data['data'].first, @cache)
-      @repo.insert(model)
-    end
-
     it 'is only available for repos with :add in methods' do
       @repo = ObjExtTypedRepo2.new(fake_bridge, @cache)
       data = {
@@ -337,6 +311,51 @@ describe TSheets::Repository do
       model = ObjExtTypedModel.from_raw(data['data'].first, @cache)
       result = @repo.insert(model)
       expect(result).to be_an_instance_of(TSheets::Result)
+    end
+
+    it 'only sends the fields that have not been excluded' do
+      @repo = ObjExtTypedRepo.new(fake_bridge, @cache)
+      data = {
+        'data' => [
+          {
+            'id' => 1,
+            'name' => "Name1",
+            'created' => '2004-02-12T15:19:21+00:00',
+            'born' => '2012-11-11',
+            'active' => true,
+            'endorsed' => false,
+            'group_ids' => [ 1, 6, 9 ],
+            'tags' => [ 'hey', 'hi', 'hello' ],
+            'significant_dates' => [ '2012-01-01', '2012-01-02' ],
+            'answers_path' => [ true, false, true ],
+            'extended' => {
+              'id' => 44,
+              'whoami' => '...'
+            }
+          }
+        ]
+      }
+      truncated_data = {
+        'data' => [
+          {
+            'name' => "Name1",
+            'born' => '2012-11-11',
+            'active' => true,
+            'endorsed' => false,
+            'group_ids' => [ 1, 6, 9 ],
+            'tags' => [ 'hey', 'hi', 'hello' ],
+            'significant_dates' => [ '2012-01-01', '2012-01-02' ],
+            'answers_path' => [ true, false, true ],
+            'extended' => {
+              'id' => 44,
+              'whoami' => '...'
+            }
+          }
+        ]
+      }
+      model = ObjExtTypedModel.from_raw(data['data'].first, @cache)
+      expect(TSheets::TestAdapter).to receive(:post).with(anything, truncated_data, anything).and_call_original
+      @repo.insert(model)
     end
 
   end

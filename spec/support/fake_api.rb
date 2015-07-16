@@ -30,9 +30,9 @@ class ObjExt < TSheets::Model
 end
 
 class ObjExtTypedModel < TSheets::Model
-  field :id, :integer
+  field :id, :integer, exclude: [ :add, :edit ]
   field :name, :string
-  field :created, :datetime
+  field :created, :datetime, exclude: [ :add, :edit ]
   field :born, :date
   field :active, :boolean
   field :endorsed, :boolean

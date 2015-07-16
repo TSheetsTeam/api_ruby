@@ -8,11 +8,11 @@ class TSheets::Model
     self.cache = cache
   end
 
-  def self.field fname, type
+  def self.field fname, type, options = {}
     send :attr_accessor, fname
 
     @@_accessors[name] ||= []
-    @@_accessors[name].push name: fname.to_sym, type: type
+    @@_accessors[name].push name: fname.to_sym, type: type, exclude: options.fetch(:exclude, [])
   end
 
   def self.model fname, options
@@ -88,8 +88,8 @@ class TSheets::Model
     instance
   end
 
-  def to_raw
-    self.attributes.inject({}) do |obj, pair|
+  def to_raw(mode = nil)
+    self.attributes(mode).inject({}) do |obj, pair|
       k, v = pair
       obj[k.to_s] = cast_to_raw(v, k)
       obj
@@ -121,8 +121,13 @@ class TSheets::Model
     @@_accessors[self.class.name]
   end
 
-  def attributes
-    @@_accessors[self.class.name].inject({}) do |sum, attr|
+  def allowed_for_mode(mode, attribute)
+    mode.nil? || attribute[:exclude].nil? || attribute[:exclude].empty? ||
+      !attribute[:exclude].include?(mode)
+  end
+
+  def attributes(mode = nil)
+    @@_accessors[self.class.name].select { |a| allowed_for_mode(mode, a) }.inject({}) do |sum, attr|
       sum[attr[:name]] = self.send(attr[:name])
       sum
     end

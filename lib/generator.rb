@@ -62,12 +62,23 @@ module TSheets
     def code_for_model name, config
       template = <<-EOF
   class TSheets::Models::<%= class_name %> < TSheets::Model<% fields.each do |field_name, field_config| %>
-    field :<%= field_name %>, <%= field_config %><% end %>
+    field :<%= field_name %>, <%= field_config[:type] %><%= field_config[:options] != {:exclude => []} ? ", \#{field_config[:options]}" : "" %><% end %>
   end
       EOF
+      __config = config["__config"]
+      has_field = Proc.new do |action, field|
+        !__config.nil? && __config.fetch("exclude", {}).fetch(action.to_s, []).include?(field)
+      end
       fields = {}
-      fields = config.map do |fname, fconfig|
-        { fname => ( !fconfig.is_a?(Array) ? ":#{fconfig}" : "[ :#{fconfig.first} ]" ) }
+      fields = config.select { |fname, fconfig| fname != "__config" }.map do |fname, fconfig|
+        { 
+          fname => {
+            type: ( !fconfig.is_a?(Array) ? ":#{fconfig}" : "[ :#{fconfig.first} ]" ) ,
+            options: {
+              exclude: [:add, :edit].select { |action| has_field.call(action, fname) }
+            }
+          }
+        }
       end.inject({}, &:merge) if config
       class_name = TSheets::Helpers.to_class_name name
       ERB.new(template).result binding

@@ -38,7 +38,7 @@ class TSheets::Repository
 
   def insert(entity)
     with_action :add do
-      self.bridge.insert(url, entity.to_raw)
+      self.bridge.insert(url, entity.to_raw(:add))
     end
   end
 

@@ -7,14 +7,18 @@ class TSheets::Result
   end
 
   def success?
-    @code == 200
+    @code == 200 && status_code == 200
   end
 
   def data
     @_data ||= OpenStruct.new JSON.parse(@body)
   end
 
-  def errors
-    data._status_extra
+  def status_code
+    @_status_code ||= data["results"].values.first.values.first["_status_code"] rescue 0
+  end
+
+  def message
+    @_message ||= data["results"].values.first.values.first["_status_extra"] rescue "Unexpected API response - inspect result body"
   end
 end

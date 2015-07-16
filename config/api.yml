@@ -81,6 +81,22 @@ objects:
     tz: integer
     tz_str: string
     location: string
+    __config:
+      exclude:
+        add:
+          - id
+          - locked
+          - on_the_clock
+          - tz
+          - tz_str
+          - location
+        edit:
+          - id
+          - locked
+          - on_the_clock
+          - tz
+          - tz_str
+          - location
   jobcode_assignment:
     id: integer
     user_id: integer
