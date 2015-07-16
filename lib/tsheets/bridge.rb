@@ -11,12 +11,21 @@ class TSheets::Bridge
     { "Authorization" => "Bearer #{self.config.access_token}" }
   end
 
-  def next_batch(url, name, options)
+  def items_from_data(data, name, is_singleton)
+    if is_singleton || !data['results'][name].is_a?(Hash)
+      data['results'][name]
+    else
+      data['results'][name].values
+    end
+  end
+
+  def next_batch(url, name, options, is_singleton = false)
     response = self.config.adapter.get "#{self.config.base_url}#{url}", options, self.auth_options
     if response.code == 200
       data = JSON.parse(response.to_str)
+      # binding.pry if name == "obj_effective_settings"
       return {
-        items: data['results'][name].is_a?(Hash) ? data['results'][name].values : data['results'][name],
+        items: items_from_data(data, name, is_singleton),
         has_more: data['more'] == true,
         supplemental: data['supplemental_data'] ? data['supplemental_data'].inject({}) do |sum, parts|
           sum

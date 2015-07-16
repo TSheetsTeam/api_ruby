@@ -92,6 +92,26 @@ class ObjTypedRepo < TSheets::Repository
   filter :significant_dates, [ :date ]
 end
 
+class ObjEffectiveSettings < TSheets::Model
+  field :general, :hash
+  field :time_entry, :hash
+  field :invoicing, :hash
+  field :alerts, :hash
+  field :dialin, :hash
+  field :sounds, :hash
+
+  default_field_type :hash
+end
+
+class ObjEffectiveSettingsRepo < TSheets::Repository
+  url '/obj_effective_settings'
+  model ObjEffectiveSettings, singleton: true
+  actions :list
+  filter :user_id, :integer
+  filter :modified_before, :datetime
+  filter :modified_since, :datetime
+end
+
 class ObjTaggedRepo < TSheets::Repository
   url '/objects'
   model ObjTaggedModel

@@ -42,15 +42,16 @@ module TSheets
 
     def code_for_repo name, config
       template = <<-EOF
-  class TSheets::Repos::<%= class_name %> < TSheets::Repository
-    url "<%= config['url'] %>"
-    model TSheets::Models::<%= model_class %>
-    actions <%= actions %><% filters.each do |field_name, field_config| %>
-    filter :<%= field_name %>, <%= field_config %><% end %>
-  end
+class TSheets::Repos::<%= class_name %> < TSheets::Repository
+  url "<%= config['url'] %>"
+  model TSheets::Models::<%= model_class %><% if is_singleton %>, singleton: true<% end %>
+  actions <%= actions %><% filters.each do |field_name, field_config| %>
+  filter :<%= field_name %>, <%= field_config %><% end %>
+end
       EOF
       class_name = TSheets::Helpers.to_class_name name
       model_class = TSheets::Helpers.to_class_name config['object']
+      is_singleton = config.fetch('is_singleton', false)
       actions = config['actions'].map { |a| ":#{a}" }.join(', ')
       filters = {}
       filters = config['filters'].map do |fname, fconfig|
@@ -61,9 +62,9 @@ module TSheets
 
     def code_for_model name, config
       template = <<-EOF
-  class TSheets::Models::<%= class_name %> < TSheets::Model<% fields.each do |field_name, field_config| %>
-    field :<%= field_name %>, <%= field_config[:type] %><%= field_config[:options] != {:exclude => []} ? ", \#{field_config[:options]}" : "" %><% end %>
-  end
+class TSheets::Models::<%= class_name %> < TSheets::Model<% fields.each do |field_name, field_config| %>
+  field :<%= field_name %>, <%= field_config[:type] %><%= field_config[:options] != {:exclude => []} ? ", \#{field_config[:options]}" : "" %><% end %>
+end
       EOF
       __config = config["__config"]
       has_field = Proc.new do |action, field|

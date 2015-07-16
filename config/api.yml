@@ -1,4 +1,11 @@
 objects:
+  effective_settings:
+    general: hash
+    time_entry: hash
+    invoicing: hash
+    alerts: hash
+    dialin: hash
+    sounds: hash
   user_permissions_set:
     admin: boolean
     mobile: boolean
@@ -138,6 +145,16 @@ objects:
     device_identifier: string
     created: datetime
 endpoints:
+  effective_settings:
+    url: "/effective_settings"
+    object: effective_settings
+    is_singleton: true
+    actions:
+      - list
+    filters:
+      user_id: integer
+      modified_before: datetime
+      modified_since: datetime
   geolocations:
     url: "/geolocations"
     object: geolocation

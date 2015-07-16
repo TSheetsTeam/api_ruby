@@ -185,6 +185,100 @@ describe TSheets::Repository do
         end
       end
     end
+
+    it 'properly parses singleton responses' do
+      response_json = <<-EOF
+{
+ "results": {
+  "obj_effective_settings": {
+   "general": {
+    "last_modified": "2013-06-20T19:16:12+00:00",
+    "settings": {
+     "tz": "tsMT",
+     "week_start": "6",
+     "clockout_override_hours": "8",
+     "payroll_end_date": "2013-05-24",
+     "payroll_timezone": "-7",
+     "employee_pto_entry": "0",
+     "payroll_type": "biweekly",
+     "emp_panel_email": "0",
+     "calculate_overtime": "1",
+     "daily_overtime": "1",
+     "daily_doubletime": "1",
+     "daily_doubletime_hours": "12",
+     "seventh_consecutive_dt": "1"
+    }
+   },
+   "time_entry": {
+    "settings": {
+     "installed": 1,
+     "time_entry_method": "timecard",
+     "time_entry": 0,
+     "timecard": 1,
+     "weekly_timecard": 1,
+     "timecard_daily": 0,
+     "timesheet_edit": 0,
+     "timesheet_map": 0,
+     "pto_entry": 1
+    }
+   },
+   "invoicing": {
+    "settings": {
+     "installed": 1
+    }
+   },
+   "alerts": {
+    "settings": {
+     "installed": "1",
+     "day_hours": "0",
+     "day_hours__notify_employee": "email",
+     "week_hours": "0"
+    },
+    "last_modified": "2013-05-31T21:58:23+00:00"
+   },
+   "dialin": {
+    "settings": {
+     "installed": "1",
+     "transcribe_notes": "1"
+    },
+    "last_modified": "2013-05-29T16:09:54+00:00"
+   },
+   "not_in_spec": {
+    "settings": {
+     "installed": "1",
+     "transcribe_notes": "1"
+    },
+    "last_modified": "2013-05-29T16:09:54+00:00"
+   },
+   "sounds": {
+    "settings": {
+     "clock_in_sound": "http:\/\/cdn.tsheets.com\/sounds\/global\/karate_1.mp3",
+     "clock_out_sound": "http:\/\/cdn.tsheets.com\/sounds\/global\/hallelujah.mp3",
+     "installed": "1",
+     "sounds_on": "1",
+     "switch_sound": "http:\/\/cdn.tsheets.com\/sounds\/global\/drip.mp3",
+     "ts_save_sound": "http:\/\/cdn.tsheets.com\/sounds\/global\/drums_3.mp3",
+     "sounds_notify": "1"
+    },
+    "last_modified": "2013-05-31T18:19:56+00:00"
+   }
+  }
+ }
+}
+      EOF
+      repo = ObjEffectiveSettingsRepo.new(fake_bridge, fake_cache)
+      expect(TSheets::TestAdapter).to receive(:get).and_return(OpenStruct.new({code: 200, to_str: response_json}))
+      results = repo.where({}).all
+      expect(results.count).to eq(1)
+      settings = results.first
+      expect(settings.general).to be_an_instance_of(Hash)
+      expect(settings.time_entry).to be_an_instance_of(Hash)
+      expect(settings.invoicing).to be_an_instance_of(Hash)
+      expect(settings.alerts).to be_an_instance_of(Hash)
+      expect(settings.dialin).to be_an_instance_of(Hash)
+      expect(settings.sounds).to be_an_instance_of(Hash)
+      expect(settings.not_in_spec).to be_an_instance_of(Hash)
+    end
   end
 
   describe 'first() method' do

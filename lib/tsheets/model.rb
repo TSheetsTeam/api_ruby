@@ -15,6 +15,16 @@ class TSheets::Model
     @@_accessors[name].push name: fname.to_sym, type: type, exclude: options.fetch(:exclude, [])
   end
 
+  def self.default_field_type type
+    define_singleton_method :default_field_type_given do
+      type
+    end
+  end
+
+  def self.default_field_type_given
+    :anything
+  end
+
   def self.model fname, options
     send :attr_accessor, fname
 
@@ -23,7 +33,10 @@ class TSheets::Model
   end
 
   def self.type_for(model_name, field_name)
-    @@_accessors[model_name].find { |a| a[:name] == field_name.to_sym }[:type]
+    acc = @@_accessors[model_name].find do |a| 
+      a[:name] == field_name.to_sym
+    end
+    (acc || {}).fetch(:type, default_field_type_given)
   end
 
   def self.type_for_key(key)
@@ -47,6 +60,10 @@ class TSheets::Model
         Date.parse(value) rescue nil
       when :boolean
         value == true
+      when :hash
+        value
+      when :anything
+        value
       else
         TSheets::Helpers.to_class(type_symbol, self).from_raw(value, cache)
       end
@@ -70,6 +87,10 @@ class TSheets::Model
         value.strftime("%Y-%m-%d")
       when :boolean
         value
+      when :hash
+        value
+      when :anything
+        value
       else
         value.to_raw
       end
@@ -79,7 +100,16 @@ class TSheets::Model
   def self.from_raw(hash, cache, supplemental = {})
     instance = hash.inject self.new(cache) do |o, p|
       k, v = p
-      o.send "#{k}=", cast_raw(v, k, cache)
+      casted = cast_raw(v, k, cache)
+      has_key = o.attributes.keys.include? k
+      if !has_key
+        o.instance_variable_set "@#{k}".to_sym, casted
+        o.define_singleton_method k do
+          o.instance_variable_get "@#{k}".to_sym
+        end
+      else
+        o.send "#{k}=", casted
+      end
       o
     end
     models.each do |model_def|

@@ -4,5 +4,7 @@ class TSheets::HttpResponse
   def initialize(response)
     @to_str = response.body
     @code = response.code
+    
+    puts @to_str if Typhoeus::Config.verbose
   end
 end

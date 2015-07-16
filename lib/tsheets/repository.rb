@@ -32,7 +32,7 @@ class TSheets::Repository
 
   def where(options)
     with_action :list do
-      TSheets::Results.new url, self.validated_options(options), self.model, self.bridge, self.cache
+      TSheets::Results.new url, self.validated_options(options), self.model, self.bridge, self.cache, self.is_singleton
     end
   end
 
@@ -94,9 +94,12 @@ class TSheets::Repository
       end
     end
 
-    def model klass
+    def model klass, options = {}
       define_method :model do
         klass
+      end
+      define_method :is_singleton do
+        options.fetch(:singleton, false)
       end
     end
 
