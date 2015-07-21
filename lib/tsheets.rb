@@ -1,5 +1,4 @@
 require "tsheets/version"
-require 'pry'
 
 module TSheets
   require "tsheets/errors"
