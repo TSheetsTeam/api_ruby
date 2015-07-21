@@ -1,5 +1,10 @@
 require "tsheets/version"
 
+if RUBY_VERSION.split('.').first.to_i < 2
+  require 'backports/2.0.0/enumerable/lazy' 
+  require 'ostruct'
+end
+
 module TSheets
   require "tsheets/errors"
   require "tsheets/helpers"

@@ -15,10 +15,10 @@ class TSheets::Result
   end
 
   def status_code
-    @_status_code ||= data["results"].values.first.values.first["_status_code"] rescue 0
+    @_status_code ||= data.results.values.first.values.first["_status_code"] rescue 0
   end
 
   def message
-    @_message ||= data["results"].values.first.values.first["_status_extra"] rescue "Unexpected API response - inspect result body"
+    @_message ||= data.results.values.first.values.first["_status_extra"] rescue "Unexpected API response - inspect result body. Exception message: #{$!.message}"
   end
 end

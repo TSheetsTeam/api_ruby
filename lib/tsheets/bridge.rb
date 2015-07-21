@@ -27,12 +27,18 @@ class TSheets::Bridge
       return {
         items: items_from_data(data, name, is_singleton),
         has_more: data['more'] == true,
-        supplemental: data['supplemental_data'] ? data['supplemental_data'].inject({}) do |sum, parts|
-          sum
-          key, value = parts
-          sum[key.to_sym] = value.values
-          sum
-        end : {}
+        supplemental: (
+          if data['supplemental_data']
+            data['supplemental_data'].inject({}) do |sum, parts|
+              sum
+              key, value = parts
+              sum[key.to_sym] = value.values
+              sum
+            end
+        else
+          {}
+        end
+        )
       }
     else
       {
