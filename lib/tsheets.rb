@@ -21,8 +21,9 @@ module TSheets
   require "tsheets/supplemental_cache"
   require "tsheets/bridge"
 
-  Dir["lib/tsheets/models/*.rb"].each {|file| require file.gsub('lib/', '') }
-  Dir["lib/tsheets/repos/*.rb"].each {|file| require file.gsub('lib/', '') }
+  base_dir = File.dirname(__FILE__)
+  Dir[File.join(base_dir, "tsheets", "models", "*.rb")].each { |file| require file }
+  Dir[File.join(base_dir, "tsheets", "repos", "*.rb")].each  { |file| require file }
 
   require "tsheets/api"
 end
