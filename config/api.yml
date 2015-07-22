@@ -1,4 +1,15 @@
 objects:
+  payroll:
+    user_id: integer
+    client_id: integer
+    start_date: date
+    end_date: date
+    total_re_seconds: integer
+    total_ot_seconds: integer
+    total_dt_seconds: integer
+    total_pto_seconds: integer
+    total_work_seconds: integer
+    pto_seconds: hash
   current_totals:
     user_id: integer
     on_the_clock: boolean
@@ -156,6 +167,17 @@ objects:
     device_identifier: string
     created: datetime
 endpoints:
+  payroll:
+    url: "/reports/payroll"
+    object: payroll
+    actions:
+      - report
+    filters:
+      start_date: date
+      end_date: date
+      user_ids: integer
+      group_ids: integer
+      include_zero_time: string
   current_totals:
     url: "/reports/current_totals"
     object: current_totals

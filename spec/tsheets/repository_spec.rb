@@ -561,6 +561,19 @@ describe TSheets::Repository do
       @repo.report({}).first
     end
 
+    it 'works well with empty responses from the web service' do
+      expect(TSheets::TestAdapter).to receive(:post).exactly(2).times.and_return OpenStruct.new({
+        code: 200,
+        to_str: {
+          "results": {
+            "obj_report": []
+          }
+        }.to_json
+      })
+      expect { @repo.report({}).first }.not_to raise_exception
+      expect(@repo.report({}).all.count).to eq(0)
+    end
+
     it 'properly returns instances of reports' do
       expect(TSheets::TestAdapter).to receive(:post).and_return OpenStruct.new({
         code: 200,

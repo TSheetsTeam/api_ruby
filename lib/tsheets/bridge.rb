@@ -12,7 +12,10 @@ class TSheets::Bridge
   end
 
   def items_from_data(data, name, is_singleton, mode)
-    return data["results"].values.first.values if mode == :report
+    if mode == :report
+      objects = data["results"].values.first
+      return objects == [] ? [] : objects.values
+    end
 
     if is_singleton || !data['results'][name].is_a?(Hash)
       data['results'][name]
