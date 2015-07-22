@@ -6,6 +6,9 @@ objects:
     alerts: hash
     dialin: hash
     sounds: hash
+  last_modified_timestamps:
+    __config:
+      default_field_type: datetime
   user_permissions_set:
     admin: boolean
     mobile: boolean
@@ -145,6 +148,12 @@ objects:
     device_identifier: string
     created: datetime
 endpoints:
+  last_modified_timestamps:
+    url: "/last_modified_timestamps"
+    object: last_modified_timestamps
+    is_singleton: true
+    actions:
+      - list
   effective_settings:
     url: "/effective_settings"
     object: effective_settings

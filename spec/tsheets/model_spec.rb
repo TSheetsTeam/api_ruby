@@ -33,7 +33,7 @@ describe TSheets::Model do
     data = {
       name: "Testy Tester",
       created: "2004-02-12T15:19:21+00:00",
-      idontexist: true
+      "idontexist" => true
     }
     object = ObjTypedModel.new data
     expect(object.inspect).to eq("<ObjTypedModel :id=>nil, :name=>\"Testy Tester\", :created=>#<DateTime: 2004-02-12T15:19:21+00:00 ((2453048j,55161s,0n),+0s,2299161j)>, :born=>nil, :active=>nil, :endorsed=>nil, :group_ids=>nil, :tags=>nil, :significant_dates=>nil, :answers_path=>nil, :idontexist=>true>")
@@ -64,6 +64,10 @@ describe TSheets::Model do
       expect(object.tags).to eq([ "awesome", "interesting", "beautiful" ])
       expect(object.significant_dates).to eq([ "1986-01-15", "2009-12-26" ].map { |d| Date.parse(d) })
       expect(object.answers_path).to eq([ true, false, false, true ])
+    end
+
+    it 'allows models without any explicit fields given' do
+      expect { EmptyObject.new onedate: "2004-02-12T15:19:21+00:00", otherdate: "2004-02-12T15:19:21+00:00" }.not_to raise_exception
     end
 
     it 'properly casts raw data into api defined objects' do

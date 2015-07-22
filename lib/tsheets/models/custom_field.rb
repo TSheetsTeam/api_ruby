@@ -10,4 +10,5 @@ class TSheets::Models::CustomField < TSheets::Model
   field :last_modified, :datetime
   field :created, :datetime
   field :required_customfields, [ :integer ]
+  
 end

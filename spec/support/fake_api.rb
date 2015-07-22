@@ -109,6 +109,10 @@ class ObjEffectiveSettings < TSheets::Model
   default_field_type :hash
 end
 
+class EmptyObject < TSheets::Model
+  default_field_type :datetime
+end
+
 class ObjEffectiveSettingsRepo < TSheets::Repository
   url '/obj_effective_settings'
   model ObjEffectiveSettings, singleton: true

@@ -22,4 +22,5 @@ class TSheets::Models::User < TSheets::Model
   field :last_modified, :datetime
   field :created, :datetime
   field :permissions, :user_permissions_set
+  
 end

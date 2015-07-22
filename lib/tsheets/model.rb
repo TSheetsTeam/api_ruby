@@ -35,7 +35,7 @@ class TSheets::Model
   end
 
   def self.type_for(model_name, field_name)
-    acc = @@_accessors[model_name].find do |a| 
+    acc = (@@_accessors[model_name] || []).find do |a| 
       a[:name] == field_name.to_sym
     end
     (acc || {}).fetch(:type, default_field_type_given)
@@ -107,7 +107,7 @@ class TSheets::Model
       has_key = o.attributes.keys.include? k
       if !has_key
         o.instance_variable_set "@#{k}".to_sym, casted
-        dynamic << { name: k }
+        dynamic << { name: k.to_sym }
         o.define_singleton_method k do
           o.instance_variable_get "@#{k}".to_sym
         end
@@ -174,7 +174,7 @@ class TSheets::Model
   end
 
   def attributes(mode = nil)
-    accessors = (@@_accessors[self.class.name]).select { |a| allowed_for_mode(mode, a) }
+    accessors = (@@_accessors[self.class.name] || []).select { |a| allowed_for_mode(mode, a) }
     attributes_for_accessors accessors, mode
   end
 

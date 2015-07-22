@@ -16,4 +16,5 @@ class TSheets::Models::Timesheet < TSheets::Model
   field :tz, :integer, {:exclude=>[:add, :edit]}
   field :tz_str, :string, {:exclude=>[:add, :edit]}
   field :location, :string, {:exclude=>[:add, :edit]}
+  
 end

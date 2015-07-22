@@ -12,4 +12,5 @@ class TSheets::Models::TimesheetDeleted < TSheets::Model
   field :created, :datetime
   field :last_modified, :datetime
   field :type, :string
+  
 end

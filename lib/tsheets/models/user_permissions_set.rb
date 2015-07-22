@@ -9,4 +9,5 @@ class TSheets::Models::UserPermissionsSet < TSheets::Model
   field :manage_my_timesheets, :boolean
   field :manage_jobcodes, :boolean
   field :approve_timesheets, :boolean
+  
 end

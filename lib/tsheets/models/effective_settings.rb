@@ -5,4 +5,5 @@ class TSheets::Models::EffectiveSettings < TSheets::Model
   field :alerts, :hash
   field :dialin, :hash
   field :sounds, :hash
+  
 end

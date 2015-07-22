@@ -5,4 +5,5 @@ class TSheets::Models::JobcodeAssignment < TSheets::Model
   field :active, :boolean
   field :last_modified, :datetime
   field :created, :datetime
+  
 end

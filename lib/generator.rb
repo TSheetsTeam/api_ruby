@@ -64,12 +64,16 @@ end
       template = <<-EOF
 class TSheets::Models::<%= class_name %> < TSheets::Model<% fields.each do |field_name, field_config| %>
   field :<%= field_name %>, <%= field_config[:type] %><%= field_config[:options] != {:exclude => []} ? ", \#{field_config[:options]}" : "" %><% end %>
+  <% if default_field_type %>
+  default_field_type :<%= default_field_type.to_sym %>
+  <% end %>
 end
       EOF
       __config = config["__config"]
       has_field = Proc.new do |action, field|
         !__config.nil? && __config.fetch("exclude", {}).fetch(action.to_s, []).include?(field)
       end
+      default_field_type = __config.nil? ? nil : __config.fetch("default_field_type", nil)
       fields = {}
       fields = config.select { |fname, fconfig| fname != "__config" }.map do |fname, fconfig|
         { 
