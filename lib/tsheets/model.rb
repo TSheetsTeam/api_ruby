@@ -4,8 +4,9 @@ class TSheets::Model
   @@_models ||= {}
   @@_accessors ||= {}
 
-  def initialize(cache)
-    self.cache = cache
+  def initialize(hash = nil, options = {})
+    self.cache = options[:cache] || TSheets::SupplementalCache.new
+    self.class.mass_assign self, hash, self.cache, {} if hash
   end
 
   def self.field fname, type, options = {}
@@ -97,8 +98,8 @@ class TSheets::Model
     end
   end
 
-  def self.from_raw(hash, cache, supplemental = {})
-    instance = hash.inject self.new(cache) do |o, p|
+  def self.mass_assign(instance, hash, cache, supplemental = {})
+    instance = hash.inject instance do |o, p|
       k, v = p
       casted = cast_raw(v, k, cache)
       has_key = o.attributes.keys.include? k
@@ -116,6 +117,11 @@ class TSheets::Model
       instance.send "#{model_def[:name]}=", resolve_supplemental(instance, model_def, cache, supplemental)
     end
     instance
+  end
+
+  def self.from_raw(hash, cache, supplemental = {})
+    instance = self.new nil, cache: cache
+    mass_assign instance, hash, cache, supplemental
   end
 
   def to_raw(mode = nil)
