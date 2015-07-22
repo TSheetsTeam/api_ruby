@@ -48,6 +48,12 @@ class TSheets::Repository
     end
   end
 
+  def delete(entity)
+    with_action :delete do
+      self.bridge.delete(url, entity.id)
+    end
+  end
+
   def all
     self.where({}).all
   end

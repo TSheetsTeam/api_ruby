@@ -58,4 +58,9 @@ class TSheets::Bridge
     TSheets::Result.new response.code, response.to_str
   end
 
+  def delete(url, id)
+    response = self.config.adapter.delete "#{self.config.base_url}#{url}", { ids: [ id ] }, self.auth_options
+    TSheets::Result.new response.code, response.to_str
+  end
+
 end

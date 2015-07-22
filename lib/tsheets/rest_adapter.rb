@@ -19,7 +19,7 @@ class TSheets::RestAdapter < TSheets::Adapter
 
     def delete(url, data, options)
       puts "DELETE #{url} (#{options.inspect}) - #{data.inspect}" if Typhoeus::Config.verbose
-      TSheets::HttpResponse.new Typhoeus.delete(url, body: data, headers: options)
+      TSheets::HttpResponse.new Typhoeus.delete(url, params: { ids: data[:ids].join(",") }, headers: options)
     end
   end
 end

@@ -453,5 +453,66 @@ describe TSheets::Repository do
     end
 
   end
+
+  describe 'delete() method' do
+    before(:each) do
+      @cache = fake_cache
+      @repo = ObjExtTypedRepo.new(fake_bridge, @cache)
+    end
+
+    it 'is only available for repos with :delete in methods' do
+      @repo = ObjExtTypedRepo2.new(fake_bridge, @cache)
+      data = {
+        'data' => [
+          {
+            'id' => 1,
+            'name' => "Name1",
+            'created' => '2004-02-12T15:19:21+00:00',
+            'born' => '2012-11-11',
+            'active' => true,
+            'endorsed' => false,
+            'group_ids' => [ 1, 6, 9 ],
+            'tags' => [ 'hey', 'hi', 'hello' ],
+            'significant_dates' => [ '2012-01-01', '2012-01-02' ],
+            'answers_path' => [ true, false, true ],
+            'extended' => {
+              'id' => 44,
+              'whoami' => '...'
+            }
+          }
+        ]
+      }
+      expect(TSheets::TestAdapter).not_to receive(:delete).with('https://rest.tsheets.com/api/v1/ext_typed_objects', data, anything())
+      model = ObjExtTypedModel.from_raw(data['data'].first, @cache)
+      expect { @repo.delete(model) }.to raise_exception(TSheets::MethodNotAvailableError)
+    end
+
+    it 'calls the service with the id of the entity stored in the ids array in params' do
+      @repo = ObjExtTypedRepoDeleteOnly.new(fake_bridge, @cache)
+      data = {
+        'data' => [
+          {
+            'id' => 34,
+            'name' => "Name1",
+            'created' => '2004-02-12T15:19:21+00:00',
+            'born' => '2012-11-11',
+            'active' => true,
+            'endorsed' => false,
+            'group_ids' => [ 1, 6, 9 ],
+            'tags' => [ 'hey', 'hi', 'hello' ],
+            'significant_dates' => [ '2012-01-01', '2012-01-02' ],
+            'answers_path' => [ true, false, true ],
+            'extended' => {
+              'id' => 44,
+              'whoami' => '...'
+            }
+          }
+        ]
+      }
+      expect(TSheets::TestAdapter).to receive(:delete).with('https://rest.tsheets.com/api/v1/ext_typed_objects', { ids: [ 34 ] }, anything()).and_call_original
+      model = ObjExtTypedModel.from_raw(data['data'].first, @cache)
+      @repo.delete(model)
+    end
+  end
 end
 

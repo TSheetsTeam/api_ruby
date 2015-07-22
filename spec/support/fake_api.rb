@@ -80,6 +80,12 @@ class ObjExtTypedRepo2 < TSheets::Repository
   filter :significant_dates, [ :date ]
 end
 
+class ObjExtTypedRepoDeleteOnly < TSheets::Repository
+  url '/ext_typed_objects'
+  model ObjExtTypedModel
+  actions :delete
+end
+
 class ObjTypedRepo < TSheets::Repository
   url '/typed_objects'
   model ObjTypedModel
