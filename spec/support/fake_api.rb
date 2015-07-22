@@ -43,6 +43,12 @@ class ObjExtTypedModel < TSheets::Model
   field :extended, :obj_ext
 end
 
+class ObjModelWithFloat < TSheets::Model
+  field :id, :integer
+  field :name, :string
+  field :ratio, :float
+end
+
 class ObjTypedModel < TSheets::Model
   field :id, :integer
   field :name, :string

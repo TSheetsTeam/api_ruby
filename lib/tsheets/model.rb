@@ -64,6 +64,8 @@ class TSheets::Model
         value == true
       when :hash
         value
+      when :float
+        value
       when :anything
         value
       else
@@ -90,6 +92,8 @@ class TSheets::Model
       when :boolean
         value
       when :hash
+        value
+      when :float
         value
       when :anything
         value

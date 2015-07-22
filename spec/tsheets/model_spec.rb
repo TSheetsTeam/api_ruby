@@ -39,6 +39,11 @@ describe TSheets::Model do
     expect(object.inspect).to eq("<ObjTypedModel :id=>nil, :name=>\"Testy Tester\", :created=>#<DateTime: 2004-02-12T15:19:21+00:00 ((2453048j,55161s,0n),+0s,2299161j)>, :born=>nil, :active=>nil, :endorsed=>nil, :group_ids=>nil, :tags=>nil, :significant_dates=>nil, :answers_path=>nil, :idontexist=>true>")
   end
 
+  it 'supports float field types' do
+    expect { ObjModelWithFloat.new ratio: 2.76 }.not_to raise_exception
+    expect(ObjModelWithFloat.new(ratio: 2.76).to_raw["ratio"]).to eq(2.76)
+  end
+
   describe 'from_raw class method' do
     it 'properly casts raw data into field types' do
       json = JSON.dump({
