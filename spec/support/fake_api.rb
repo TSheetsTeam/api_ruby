@@ -55,6 +55,11 @@ class ObjModelWithObject < TSheets::Model
   field :object, :object
 end
 
+class ObjReport < TSheets::Model
+  field :user_id, :integer
+  field :ratio, :float
+end
+
 class ObjTypedModel < TSheets::Model
   field :id, :integer
   field :name, :string
@@ -66,6 +71,13 @@ class ObjTypedModel < TSheets::Model
   field :tags, [ :string ]
   field :significant_dates, [ :date ]
   field :answers_path, [ :boolean ]
+end
+
+class ObjReportRepo < TSheets::Repository
+  url '/obj_report'
+  model ObjReport
+  actions :report
+  filter :user_ids, [ :integer ]
 end
 
 class ObjExtTypedRepo < TSheets::Repository

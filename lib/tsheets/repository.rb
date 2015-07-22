@@ -36,6 +36,12 @@ class TSheets::Repository
     end
   end
 
+  def report(options)
+    with_action :report do
+      TSheets::Results.new url, self.validated_options(options), self.model, self.bridge, self.cache, self.is_singleton, :report
+    end
+  end
+
   def insert(entity)
     with_action :add do
       self.bridge.insert(url, entity.to_raw(:add))

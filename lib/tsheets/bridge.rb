@@ -11,7 +11,9 @@ class TSheets::Bridge
     { "Authorization" => "Bearer #{self.config.access_token}" }
   end
 
-  def items_from_data(data, name, is_singleton)
+  def items_from_data(data, name, is_singleton, mode)
+    return data["results"].values.first.values if mode == :report
+
     if is_singleton || !data['results'][name].is_a?(Hash)
       data['results'][name]
     else
@@ -19,13 +21,13 @@ class TSheets::Bridge
     end
   end
 
-  def next_batch(url, name, options, is_singleton = false)
-    response = self.config.adapter.get "#{self.config.base_url}#{url}", options, self.auth_options
+  def next_batch(url, name, options, is_singleton = false, mode = :list)
+    method = mode == :list ? :get : :post
+    response = self.config.adapter.send method, "#{self.config.base_url}#{url}", options, self.auth_options
     if response.code == 200
       data = JSON.parse(response.to_str)
-      # binding.pry if name == "obj_effective_settings"
       return {
-        items: items_from_data(data, name, is_singleton),
+        items: items_from_data(data, name, is_singleton, mode),
         has_more: data['more'] == true,
         supplemental: (
           if data['supplemental_data']

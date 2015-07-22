@@ -514,5 +514,63 @@ describe TSheets::Repository do
       @repo.delete(model)
     end
   end
+
+  describe '#report method' do
+    before(:each) do
+      @cache = fake_cache
+      @repo = ObjReportRepo.new(fake_bridge, @cache)
+    end
+
+    it 'is only available for repos with :report in methods' do
+      repo2 = ObjExtTypedRepo2.new(fake_bridge, @cache)
+      expect { repo2.report({}) }.to raise_exception(TSheets::MethodNotAvailableError)
+      expect { @repo.report({}) }.not_to raise_exception(TSheets::MethodNotAvailableError)
+    end
+
+    it 'sends a POST request to the web service' do
+      expect(TSheets::TestAdapter).to receive(:post).and_return OpenStruct.new({
+        code: 200,
+        to_str: {
+          "results": {
+            "obj_report": {
+              "191544": {
+                "user_id": 191544,
+                "ratio": 183.56
+              }
+            }
+          }
+        }.to_json
+      })
+      @repo.report({}).first
+    end
+
+    it 'properly returns instances of reports' do
+      expect(TSheets::TestAdapter).to receive(:post).and_return OpenStruct.new({
+        code: 200,
+        to_str: {
+          "results": {
+            "obj_report": {
+              "191544": {
+                "user_id": 191544,
+                "ratio": 183.56
+              },
+              "191545": {
+                "user_id": 191545,
+                "ratio": 183.56
+              },
+              "191546": {
+                "user_id": 191546,
+                "ratio": 183.56
+              }
+            }
+          }
+        }.to_json
+      })
+      reports = @repo.report({}).all
+      expect(reports.count).to eq(3)
+      expect(reports.map(&:user_id)).to eq([191544, 191545, 191546])
+    end
+
+  end
 end
 
