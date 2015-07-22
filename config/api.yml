@@ -1,4 +1,12 @@
 objects:
+  current_totals:
+    user_id: integer
+    on_the_clock: boolean
+    timesheet_id: integer
+    jobcode_id: integer
+    group_id: integer
+    shift_seconds: integer
+    day_seconds: integer
   effective_settings:
     general: hash
     time_entry: hash
@@ -148,6 +156,19 @@ objects:
     device_identifier: string
     created: datetime
 endpoints:
+  current_totals:
+    url: "/reports/current_totals"
+    object: current_totals
+    actions:
+      - report
+    filters:
+      user_ids: integer[]
+      group_ids: integer[]
+      on_the_clock: string
+      page: integer
+      per_page: integer
+      order_by: string
+      order_desc: boolean
   last_modified_timestamps:
     url: "/last_modified_timestamps"
     object: last_modified_timestamps

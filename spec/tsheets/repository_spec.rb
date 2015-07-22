@@ -528,7 +528,24 @@ describe TSheets::Repository do
     end
 
     it 'sends a POST request to the web service' do
-      expect(TSheets::TestAdapter).to receive(:post).and_return OpenStruct.new({
+      expect(TSheets::TestAdapter).to receive(:post).with(anything(), { data: { user_ids: [1,2,3] } }, anything()).and_return OpenStruct.new({
+        code: 200,
+        to_str: {
+          "results": {
+            "obj_report": {
+              "191544": {
+                "user_id": 191544,
+                "ratio": 183.56
+              }
+            }
+          }
+        }.to_json
+      })
+      @repo.report({user_ids: [1,2,3] }).first
+    end
+
+    it 'sends a POST request to the web service with data => 0 if data is empty' do
+      expect(TSheets::TestAdapter).to receive(:post).with(anything(), { data: 0 }, anything()).and_return OpenStruct.new({
         code: 200,
         to_str: {
           "results": {

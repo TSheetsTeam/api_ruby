@@ -23,6 +23,7 @@ class TSheets::Bridge
 
   def next_batch(url, name, options, is_singleton = false, mode = :list)
     method = mode == :list ? :get : :post
+    options = { data: (options.empty? ? 0 : options) } if mode == :report
     response = self.config.adapter.send method, "#{self.config.base_url}#{url}", options, self.auth_options
     if response.code == 200
       data = JSON.parse(response.to_str)
