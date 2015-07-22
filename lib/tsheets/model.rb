@@ -66,6 +66,8 @@ class TSheets::Model
         value
       when :float
         value
+      when :object
+        value == "" ? {} : value
       when :anything
         value
       else
@@ -95,6 +97,8 @@ class TSheets::Model
         value
       when :float
         value
+      when :object
+        value.empty? ? "" : value
       when :anything
         value
       else

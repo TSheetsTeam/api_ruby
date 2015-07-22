@@ -49,6 +49,12 @@ class ObjModelWithFloat < TSheets::Model
   field :ratio, :float
 end
 
+class ObjModelWithObject < TSheets::Model
+  field :id, :integer
+  field :name, :string
+  field :object, :object
+end
+
 class ObjTypedModel < TSheets::Model
   field :id, :integer
   field :name, :string

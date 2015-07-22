@@ -44,6 +44,14 @@ describe TSheets::Model do
     expect(ObjModelWithFloat.new(ratio: 2.76).to_raw["ratio"]).to eq(2.76)
   end
 
+  it 'supports object field types' do
+    expect { ObjModelWithObject.new object: { "a": 1, "b": 2 } }.not_to raise_exception
+    expect { ObjModelWithObject.new object: "" }.not_to raise_exception
+    expect(ObjModelWithObject.new(object: "").object).to eq({})
+    expect(ObjModelWithObject.new(object: "").to_raw["object"]).to eq("")
+    expect(ObjModelWithObject.new(object: { "a": 1, "b": 2 }).to_raw["object"]).to eq({ "a": 1, "b": 2 })
+  end
+
   describe 'from_raw class method' do
     it 'properly casts raw data into field types' do
       json = JSON.dump({
