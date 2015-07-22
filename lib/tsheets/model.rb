@@ -1,11 +1,12 @@
 class TSheets::Model
-  attr_accessor :cache
+  attr_accessor :cache, :_dynamic_accessors
 
   @@_models ||= {}
   @@_accessors ||= {}
 
   def initialize(hash = nil, options = {})
     self.cache = options[:cache] || TSheets::SupplementalCache.new
+    self._dynamic_accessors ||= []
     self.class.mass_assign self, hash, self.cache, {} if hash
   end
 
@@ -99,12 +100,14 @@ class TSheets::Model
   end
 
   def self.mass_assign(instance, hash, cache, supplemental = {})
+    dynamic = instance._dynamic_accessors
     instance = hash.inject instance do |o, p|
       k, v = p
       casted = cast_raw(v, k, cache)
       has_key = o.attributes.keys.include? k
       if !has_key
         o.instance_variable_set "@#{k}".to_sym, casted
+        dynamic << { name: k }
         o.define_singleton_method k do
           o.instance_variable_get "@#{k}".to_sym
         end
@@ -116,6 +119,7 @@ class TSheets::Model
     models.each do |model_def|
       instance.send "#{model_def[:name]}=", resolve_supplemental(instance, model_def, cache, supplemental)
     end
+    instance._dynamic_accessors = dynamic
     instance
   end
 
@@ -162,14 +166,27 @@ class TSheets::Model
       !attribute[:exclude].include?(mode)
   end
 
-  def attributes(mode = nil)
-    @@_accessors[self.class.name].select { |a| allowed_for_mode(mode, a) }.inject({}) do |sum, attr|
+  def attributes_for_accessors(accessors, mode = nil)
+    accessors.inject({}) do |sum, attr|
       sum[attr[:name]] = self.send(attr[:name])
       sum
     end
   end
 
+  def attributes(mode = nil)
+    accessors = (@@_accessors[self.class.name]).select { |a| allowed_for_mode(mode, a) }
+    attributes_for_accessors accessors, mode
+  end
+
+  def dynamic_attributes
+    attributes_for_accessors @_dynamic_accessors
+  end
+
+  def all_attributes(mode = nil)
+    attributes(mode).merge dynamic_attributes
+  end
+
   def inspect
-    "<#{self.class.name} #{self.attributes.inspect.gsub(/(\{|\})/, '')}>"
+    "<#{self.class.name} #{self.all_attributes.inspect.gsub(/(\{|\})/, '')}>"
   end
 end

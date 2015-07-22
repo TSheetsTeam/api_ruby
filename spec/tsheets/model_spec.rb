@@ -29,6 +29,16 @@ describe TSheets::Model do
     expect(object.answers_path).to eq([ true, false, false, true ])
   end
 
+  it 'shows dynamic fields too when inspecting' do
+    data = {
+      name: "Testy Tester",
+      created: "2004-02-12T15:19:21+00:00",
+      idontexist: true
+    }
+    object = ObjTypedModel.new data
+    expect(object.inspect).to eq("<ObjTypedModel :id=>nil, :name=>\"Testy Tester\", :created=>#<DateTime: 2004-02-12T15:19:21+00:00 ((2453048j,55161s,0n),+0s,2299161j)>, :born=>nil, :active=>nil, :endorsed=>nil, :group_ids=>nil, :tags=>nil, :significant_dates=>nil, :answers_path=>nil, :idontexist=>true>")
+  end
+
   describe 'from_raw class method' do
     it 'properly casts raw data into field types' do
       json = JSON.dump({
