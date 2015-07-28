@@ -31,6 +31,20 @@ describe TSheets::Repository do
       expect { repo2.all }.not_to raise_exception
     end
 
+    it 'throws an exception when 417 is being returned' do
+      reply = <<-EOF
+{
+ "error": {
+  "code": 417,
+  "message": "Expectation Failed: Problem getting timesheets: Oops! Your date range was too long, please narrow and try again!"
+ }
+}
+      EOF
+      allow(TSheets::TestAdapter).to receive(:get).and_return OpenStruct.new({code: 417, to_str: reply})
+      repo = ObjRepo.new(fake_bridge, fake_cache)
+      expect { repo.where({}).first }.to raise_exception(TSheets::ExpectationFailedError)
+    end
+
     context 'properly uses given filters' do
       it 'sends given filters with values as params' do
         repo = ObjTypedRepo.new(fake_bridge, fake_cache) 

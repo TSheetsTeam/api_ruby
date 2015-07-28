@@ -28,8 +28,8 @@ class TSheets::Bridge
     method = mode == :list ? :get : :post
     options = { data: (options.empty? ? 0 : options) } if mode == :report
     response = self.config.adapter.send method, "#{self.config.base_url}#{url}", options, self.auth_options
+    data = JSON.parse(response.to_str)
     if response.code == 200
-      data = JSON.parse(response.to_str)
       return {
         items: items_from_data(data, name, is_singleton, mode),
         has_more: data['more'] == true,
@@ -47,10 +47,7 @@ class TSheets::Bridge
         )
       }
     else
-      {
-        items: [],
-        has_more: false
-      }
+      raise TSheets::ExpectationFailedError, data.fetch("error", {}).fetch("message", "").gsub('Expectation Failed: ', '')
     end
   end
 
