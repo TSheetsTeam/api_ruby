@@ -10,6 +10,10 @@ objects:
     total_pto_seconds: integer
     total_work_seconds: integer
     pto_seconds: hash
+  project:
+    start_date: date
+    end_date: date
+    totals: hash
   current_totals:
     user_id: integer
     on_the_clock: boolean
@@ -167,6 +171,19 @@ objects:
     device_identifier: string
     created: datetime
 endpoints:
+  project:
+    url: "/reports/project"
+    object: project
+    actions:
+      - report
+    filters:
+      start_date: date
+      end_date: date
+      user_ids: integer[]
+      group_ids: integer[]
+      jobcode_ids: integer[]
+      jobcode_type: string
+      customfielditems: hash
   payroll:
     url: "/reports/payroll"
     object: payroll
