@@ -30,22 +30,26 @@ class TSheets::Bridge
     response = self.config.adapter.send method, "#{self.config.base_url}#{url}", options, self.auth_options
     data = JSON.parse(response.to_str)
     if response.code == 200
-      return {
-        items: items_from_data(data, name, is_singleton, mode),
-        has_more: data['more'] == true,
-        supplemental: (
-          if data['supplemental_data']
-            data['supplemental_data'].inject({}) do |sum, parts|
-              sum
-              key, value = parts
-              sum[key.to_sym] = value.values
-              sum
-            end
-        else
-          {}
-        end
-        )
-      }
+      if data == []
+        return { items: [], has_more: false, supplemental: {} }
+      else
+        return {
+          items: items_from_data(data, name, is_singleton, mode),
+          has_more: data['more'] == true,
+          supplemental: (
+            if data['supplemental_data']
+              data['supplemental_data'].inject({}) do |sum, parts|
+                sum
+                key, value = parts
+                sum[key.to_sym] = value.values
+                sum
+              end
+          else
+            {}
+          end
+          )
+        }
+      end
     else
       raise TSheets::ExpectationFailedError, data.fetch("error", {}).fetch("message", "").gsub('Expectation Failed: ', '')
     end

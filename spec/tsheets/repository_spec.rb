@@ -31,6 +31,17 @@ describe TSheets::Repository do
       expect { repo2.all }.not_to raise_exception
     end
 
+    it 'handles empty arrays in response properly' do
+      reply = <<-EOF
+      [
+       
+      ]
+      EOF
+      allow(TSheets::TestAdapter).to receive(:get).and_return OpenStruct.new({code: 200, to_str: reply})
+      repo = ObjRepo.new(fake_bridge, fake_cache)
+      expect(repo.where({}).all).to eq([])
+    end
+
     it 'throws an exception when 417 is being returned' do
       reply = <<-EOF
 {
