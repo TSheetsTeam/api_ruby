@@ -1,4 +1,15 @@
 objects:
+  reminder:
+    id: integer
+    user_id: integer
+    reminder_type: string
+    due_time: string
+    due_days_of_week: string
+    distribution_methods: [ string ]
+    active: boolean
+    enabled: boolean
+    last_modified: datetime
+    created: datetime
   payroll:
     user_id: integer
     client_id: integer
@@ -171,6 +182,17 @@ objects:
     device_identifier: string
     created: datetime
 endpoints:
+  reminders:
+    url: "/reminders"
+    object: reminder
+    actions:
+      - list
+      - add
+      - edit
+    filters:
+      user_ids: integer[]
+      reminder_types: string[]
+      modified_since: datetime
   project:
     url: "/reports/project"
     object: project
