@@ -1,4 +1,13 @@
 objects:
+  notification:
+    id: integer
+    user_id: integer
+    msg_tracking_id: string
+    message: string
+    method: string
+    precheck: string
+    delivery_time: datetime
+    created: date
   reminder:
     id: integer
     user_id: integer
@@ -182,6 +191,21 @@ objects:
     device_identifier: string
     created: datetime
 endpoints:
+  notifications:
+    url: "/notifications"
+    object: notification
+    actions:
+      - list
+      - add
+      - delete
+    filters:
+      ids: integer[]
+      delivery_before: datetime
+      delivery_after: datetime
+      user_id: integer
+      msg_tracking_id: string
+      per_page: integer
+      page: integer
   reminders:
     url: "/reminders"
     object: reminder
