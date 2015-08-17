@@ -8,7 +8,7 @@ Below examples assume that you properly added the tsheets gem into your Gemfile 
 
 ## Authentication
 
-TSheets platform uses OAuth2 for authentication. Because of the character of the library, it doesn't deal with the proicess of obtaining the authentication token needed for the OAuth2 protocol. You can find information about obtaining the token statically via the application's interface here: [https://developers.tsheets.com/docs/api/authentication]()
+TSheets platform uses OAuth2 for authentication. Because of the character of the library, it doesn't deal with the process of obtaining the authentication token needed for the OAuth2 protocol. You can find information about obtaining the token statically via the application's interface here: [https://developers.tsheets.com/docs/api/authentication]()
 
 Once the auth token is obtained, a user has to create the 'api' instance object e.g:
 
@@ -26,7 +26,7 @@ The 'api' instance gives access to different resource end points e. g:
 api.timesheets.where(start_date: some_start, end_date: some_end)
 ```
 
-The 'timesheets' method returns an instance of the timesheets end point repository. Repositires are means of communication with the TSheets API. They provide ways of fetching data as well as updating, inserting or deleting.
+The 'timesheets' method returns an instance of the timesheets end point repository. Repositories are means of communication with the TSheets API. They provide ways of fetching data as well as updating, inserting or deleting.
 
 ### Fetching data
 
