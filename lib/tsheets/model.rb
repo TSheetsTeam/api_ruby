@@ -141,7 +141,7 @@ class TSheets::Model
       k, v = pair
       obj[k.to_s] = cast_to_raw(v, k)
       obj
-    end
+    end.reject { |k, v| v.nil? }
   end
 
   def self.models

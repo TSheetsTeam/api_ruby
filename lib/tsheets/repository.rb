@@ -50,7 +50,7 @@ class TSheets::Repository
 
   def update(entity)
     with_action :edit do
-      self.bridge.update(url, entity.to_raw)
+      self.bridge.update(url, entity.to_raw(:edit))
     end
   end
 

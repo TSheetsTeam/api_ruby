@@ -5,8 +5,8 @@ class TSheets::Models::Timesheet < TSheets::Model
   field :locked, :integer, {:exclude=>[:add, :edit]}
   field :notes, :string
   field :customfields, :string
-  field :created, :datetime
-  field :last_modified, :datetime
+  field :created, :datetime, {:exclude=>[:add, :edit]}
+  field :last_modified, :datetime, {:exclude=>[:add, :edit]}
   field :type, :string
   field :on_the_clock, :boolean, {:exclude=>[:add, :edit]}
   field :start, :datetime

@@ -143,6 +143,8 @@ objects:
           - tz
           - tz_str
           - location
+          - created
+          - last_modified
         edit:
           - id
           - locked
@@ -150,6 +152,8 @@ objects:
           - tz
           - tz_str
           - location
+          - created 
+          - last_modified
   jobcode_assignment:
     id: integer
     user_id: integer

@@ -12,3 +12,5 @@
 *.swp
 *.swo
 *.swn
+*.swm
+.ruby-version

@@ -9,12 +9,12 @@ class TSheets::RestAdapter < TSheets::Adapter
 
     def post(url, data, options)
       puts "POST #{url} (#{options.inspect}) - #{data.inspect}" if Typhoeus::Config.verbose
-      TSheets::HttpResponse.new Typhoeus.post(url, body: data, headers: options)
+      TSheets::HttpResponse.new Typhoeus.post(url, body: data.to_json, headers: options)
     end
 
     def put(url, data, options)
       puts "PUT #{url} (#{options.inspect}) - #{data.inspect}" if Typhoeus::Config.verbose
-      TSheets::HttpResponse.new Typhoeus.put(url, body: data, headers: options)
+      TSheets::HttpResponse.new Typhoeus.put(url, body: data.to_json, headers: options)
     end
 
     def delete(url, data, options)

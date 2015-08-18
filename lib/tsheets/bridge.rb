@@ -8,7 +8,7 @@ class TSheets::Bridge
   end
 
   def auth_options
-    { "Authorization" => "Bearer #{self.config.access_token}" }
+    { "Authorization" => "Bearer #{self.config.access_token}", 'Content-Type'=> "application/json" }
   end
 
   def items_from_data(data, name, is_singleton, mode)
