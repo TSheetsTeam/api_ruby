@@ -7,7 +7,7 @@ class TSheets::Repository
     boolean: [ ::TrueClass, ::FalseClass ],
     integer: [ ::Fixnum ],
     string:  [ ::String, ::Symbol ],
-    date:    [ ::Date, ::DateTime ],
+    date:    [ ::Date ],
     datetime: [ ::DateTime ]
   }
 

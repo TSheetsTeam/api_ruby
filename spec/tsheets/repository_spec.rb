@@ -74,6 +74,8 @@ describe TSheets::Repository do
         repo = ObjTypedRepo.new(fake_bridge, fake_cache) 
         params = { ids: [ 1 ], name: 'Hello', born: true, endorsed: false, tags: [ 'cool', 'unique' ], significant_dates: [ DateTime.now.to_date, "1900-01-01" ] }
         expect { repo.where(params).all }.to raise_exception(TSheets::FilterValueInvalidError)
+        params = { ids: [ 1 ], name: 'Hello', born: true, endorsed: false, tags: [ 'cool', 'unique' ], since: DateTime.parse('2015-01-01') }
+        expect { repo.where(params).all }.to raise_exception(TSheets::FilterValueInvalidError)
       end
     end
 

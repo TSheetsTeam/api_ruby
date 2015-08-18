@@ -10,6 +10,6 @@ describe 'Real TSheets API' do
       code: 200,
       to_str: JSON.dump(data)
     }))
-    expect { repo.where(start_date: DateTime.parse("2012-01-01"), end_date: DateTime.now).all }.not_to raise_exception
+    expect { repo.where(start_date: Date.parse("2012-01-01"), end_date: DateTime.now.to_date).all }.not_to raise_exception
   end
 end

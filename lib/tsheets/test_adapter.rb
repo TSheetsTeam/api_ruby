@@ -1,6 +1,6 @@
 class TSheets::TestAdapter < TSheets::Adapter
   class << self
-    def get(url, options)
+    def get(url, options, headers)
       "TEST ADAPTER RESPONSE - STUB ME OUT"
     end
 

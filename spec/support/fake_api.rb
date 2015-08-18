@@ -117,9 +117,11 @@ class ObjTypedRepo < TSheets::Repository
   filter :ids, [ :integer ]
   filter :name, :string
   filter :born, :boolean
+  filter :created, :datetime
   filter :endorsed, :boolean
   filter :tags, [ :string ]
   filter :significant_dates, [ :date ]
+  filter :since, :date
 end
 
 class ObjEffectiveSettings < TSheets::Model
