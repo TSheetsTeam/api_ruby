@@ -77,10 +77,9 @@ class TSheets::Model
   end
 
   def cast_to_raw(value, key, type = nil)
-    return nil if value.nil?
     type_symbol = type || self.class.type_for_key(key)
     if type_symbol.is_a?(Array)
-      value.map { |i| cast_to_raw(i, key, type_symbol.first) }
+      value.nil? ? [] : value.map { |i| cast_to_raw(i, key, type_symbol.first) }
     else
       case type_symbol
       when :integer
@@ -88,9 +87,9 @@ class TSheets::Model
       when :string
         value
       when :datetime
-        value.iso8601
+        value.nil? ? "" : value.iso8601
       when :date
-        value.strftime("%Y-%m-%d")
+        value.nil? ? "" : value.strftime("%Y-%m-%d")
       when :boolean
         value
       when :hash
@@ -102,7 +101,7 @@ class TSheets::Model
       when :anything
         value
       else
-        value.to_raw
+        value.nil? ? nil : value.to_raw
       end
     end
   end

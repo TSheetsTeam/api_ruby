@@ -355,7 +355,7 @@ describe TSheets::Repository do
             'name' => "Name1",
             'created' => '2004-02-12T15:19:21+00:00',
             'born' => nil,
-            'active' => true,
+            'active' => nil,
             'endorsed' => false,
             'group_ids' => [ 1, 6, 9 ],
             'tags' => [ 'hey', 'hi', 'hello' ],
@@ -372,7 +372,7 @@ describe TSheets::Repository do
         'data' => [
           {
             'name' => "Name1",
-            'active' => true,
+            'born' => "",
             'endorsed' => false,
             'group_ids' => [ 1, 6, 9 ],
             'tags' => [ 'hey', 'hi', 'hello' ],

@@ -146,7 +146,7 @@ describe TSheets::Model do
       expect(object.significant_dates).to eq([ "1986-01-15", "2009-12-26" ].map { |d| Date.parse(d) })
       expect(object.answers_path).to eq([ true, false, false, true ])
       expect { object.to_raw }.not_to raise_exception
-      expect(object.to_raw["created"]).to be_nil
+      expect(object.to_raw["created"]).to eq("")
     end
 
   end
