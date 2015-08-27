@@ -32,13 +32,13 @@ class TSheets::Repository
 
   def where(options)
     with_action :list do
-      TSheets::Results.new url, self.validated_options(options), self.model, self.bridge, self.cache, self.is_singleton
+      TSheets::Results.new url, self.validated_options(options), self, self.bridge, self.cache, self.is_singleton
     end
   end
 
   def report(options)
     with_action :report do
-      TSheets::Results.new url, self.validated_options(options), self.model, self.bridge, self.cache, self.is_singleton, :report
+      TSheets::Results.new url, self.validated_options(options), self, self.bridge, self.cache, self.is_singleton, :report
     end
   end
 
@@ -124,6 +124,10 @@ class TSheets::Repository
     def filter fname, type
       @@filters ||= {}
       @@filters[fname] = type
+    end
+
+    def filters
+      @@filters
     end
 
     def inherited(child)

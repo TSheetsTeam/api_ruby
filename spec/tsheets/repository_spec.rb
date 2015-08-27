@@ -56,6 +56,25 @@ describe TSheets::Repository do
       expect { repo.where({}).first }.to raise_exception(TSheets::ExpectationFailedError)
     end
 
+    it 'increases the page value when iterating between batches' do
+      iter = 0
+      allow_any_instance_of(TSheets::Bridge).to receive(:next_batch) { |_bridge, url, name, options|
+        run = options.fetch(:page, 0)
+        puts run
+        raise ArgumentError, "page did not change with the fetch" if iter >= 2 and run == 0
+        iter += 1
+        ret = { 
+          items: ((run * 4)..(((run+1) * 4) - 1)).to_a.map { |j| {id: j + 1, name: "Name#{j+1}"}  },
+          has_more: (run < 3)
+        }
+      }
+      repo = ObjTagRepo.new(fake_bridge, fake_cache)
+      results = repo.where({}).all
+      expect(results.count).to equal(16)
+      expect(results.map(&:id)).to eq([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16])
+      expect(results.map(&:name)).to eq([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16].to_a.map { |i| "Name#{i}" })
+    end
+
     context 'properly uses given filters' do
       it 'sends given filters with values as params' do
         repo = ObjTypedRepo.new(fake_bridge, fake_cache) 
@@ -600,7 +619,7 @@ describe TSheets::Repository do
     end
 
     it 'sends a POST request to the web service' do
-      expect(TSheets::TestAdapter).to receive(:post).with(anything(), { data: { user_ids: [1,2,3] } }, anything()).and_return OpenStruct.new({
+      expect(TSheets::TestAdapter).to receive(:post).with(anything(), { data: { user_ids: [1,2,3], page: 0 } }, anything()).and_return OpenStruct.new({
         code: 200,
         to_str: {
           "results": {
@@ -617,7 +636,7 @@ describe TSheets::Repository do
     end
 
     it 'sends a POST request to the web service with data => 0 if data is empty' do
-      expect(TSheets::TestAdapter).to receive(:post).with(anything(), { data: 0 }, anything()).and_return OpenStruct.new({
+      expect(TSheets::TestAdapter).to receive(:post).with(anything(), { data: { page: 0 } }, anything()).and_return OpenStruct.new({
         code: 200,
         to_str: {
           "results": {

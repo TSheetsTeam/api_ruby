@@ -73,6 +73,12 @@ class ObjTypedModel < TSheets::Model
   field :answers_path, [ :boolean ]
 end
 
+class ObjTagRepo < TSheets::Repository
+  url '/obj_tag'
+  model ObjTagModel
+  actions :list
+end
+
 class ObjReportRepo < TSheets::Repository
   url '/obj_report'
   model ObjReport

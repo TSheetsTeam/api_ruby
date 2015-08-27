@@ -1,15 +1,16 @@
 class TSheets::Results
   include Enumerable
 
-  attr_accessor :url, :options, :model, :cache,
+  attr_accessor :url, :options, :model, :cache, :page, :repo,
     :bridge, :name, :index, :loaded, :has_more, :is_singleton, :mode
 
   alias_method :all, :to_a
 
-  def initialize(url, options, model, bridge, cache, is_singleton = false, mode = :list)
+  def initialize(url, options, repo, bridge, cache, is_singleton = false, mode = :list)
     self.url = url
     self.options = options
-    self.model = model
+    self.repo = repo
+    self.model = repo.model
     self.name = "#{TSheets::Helpers.class_to_endpoint(model)}#{is_singleton ? '' : 's'}"
     self.index = -1
     self.loaded = []
@@ -18,6 +19,7 @@ class TSheets::Results
     self.has_more = true
     self.is_singleton = is_singleton
     self.mode = mode
+    self.page = 0
   end
 
   def each
@@ -29,7 +31,8 @@ class TSheets::Results
   end
 
   def load_next_batch
-    response = self.bridge.next_batch(self.url, self.name, self.options, self.is_singleton, self.mode)
+    options = self.options.merge(page: self.page) if !self.repo.filters[:page].nil?
+    response = self.bridge.next_batch(self.url, self.name, options, self.is_singleton, self.mode)
     batch = response[:items]
     self.has_more = !self.is_singleton && self.mode == :list && response[:has_more]
     if self.is_singleton
@@ -37,6 +40,7 @@ class TSheets::Results
     else
       self.loaded += batch.map { |o| self.model.from_raw(o, self.cache, response[:supplemental] || {}) }
     end
+    self.page += 1
     batch != [] && batch != {}
   end
 
