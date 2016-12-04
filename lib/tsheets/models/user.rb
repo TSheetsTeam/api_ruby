@@ -1,6 +1,7 @@
 class TSheets::Models::User < TSheets::Model
   field :id, :integer
   field :username, :string
+  field :password
   field :email, :string
   field :first_name, :string
   field :last_name, :string
@@ -22,5 +23,5 @@ class TSheets::Models::User < TSheets::Model
   field :last_modified, :datetime
   field :created, :datetime
   field :permissions, :user_permissions_set
-  
+
 end
