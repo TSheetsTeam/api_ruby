@@ -1,7 +1,7 @@
 class TSheets::Models::User < TSheets::Model
   field :id, :integer
   field :username, :string
-  field :password
+  field :password, :string
   field :email, :string
   field :first_name, :string
   field :last_name, :string
