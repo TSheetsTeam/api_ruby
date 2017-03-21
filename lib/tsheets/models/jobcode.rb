@@ -8,10 +8,9 @@ class TSheets::Models::Jobcode < TSheets::Model
   field :billable_rate, :float
   field :has_children, :boolean
   field :assigned_to_all, :boolean
-  field :required_customfields, [ :integer ]
-  field :filtered_customfielditems, :object
+  field :required_customfields, [ :integer ], exclude: [:add, :edit]
+  field :filtered_customfielditems, :object, exclude: [:add, :edit]
   field :active, :boolean
-  field :last_modified, :datetime
-  field :created, :datetime
-  
+  field :last_modified, :datetime, exclude: [:add, :edit]
+  field :created, :datetime, exclude: [:add, :edit]
 end
