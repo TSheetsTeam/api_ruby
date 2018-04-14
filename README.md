@@ -109,7 +109,7 @@ end
 
 ### Specifics
 
-All information about possible filters one can pass to **where**, or required when inserting or updating are available e. g: [https://developers.tsheets.com/docs/api/]()
+All information about possible filters one can pass to **where**, or required when inserting or updating are available e. g: [https://developers.tsheets.com/docs/api/](https://developers.tsheets.com/docs/api/)
 
 ## Reports
 
