@@ -19,7 +19,7 @@ class TSheets::Results
     self.has_more = true
     self.is_singleton = is_singleton
     self.mode = mode
-    self.page = 0
+    self.page = 1
   end
 
   def each
