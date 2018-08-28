@@ -5,7 +5,7 @@ class TSheets::Repository
 
   @@allowed_classes_for_spec = {
     boolean: [ ::TrueClass, ::FalseClass ],
-    integer: [ ::Fixnum ],
+    integer: [ ::Integer ],
     string:  [ ::String, ::Symbol ],
     date:    [ ::Date ],
     datetime: [ ::DateTime ]
