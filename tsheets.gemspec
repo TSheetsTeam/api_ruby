@@ -23,7 +23,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "backports"
 
   spec.add_development_dependency "bundler", "~> 1.9"
-  spec.add_development_dependency "rake", "~> 12.3"
+  spec.add_development_dependency "rake", "~> 12.3", ">= 12.3.3" # 12.3.3 fixes CVE-2020-8130
   spec.add_development_dependency "rspec"
   spec.add_development_dependency "rspec-mocks"
   spec.add_development_dependency "pry"
